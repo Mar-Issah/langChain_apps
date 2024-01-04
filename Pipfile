@@ -6,9 +6,6 @@ name = "pypi"
 [packages]
 openai = "*"
 langchain = "*"
-pypdf2 = "*"
-tiktoken = "*"
-faiss-cpu = "*"
 huggingface-hub = "*"
 streamlit = "*"
 
