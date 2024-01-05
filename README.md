@@ -9,5 +9,6 @@ LangChain apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugg
 ## To run this app locally, follow these steps:
 
 - Clone the repository
-- `pip install -r requirement.txt`
+- `pipenv shell`
+- `pipenv install -r requirement.txt`
 - `streamlit run streamlit.py`
