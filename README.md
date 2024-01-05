@@ -1,6 +1,6 @@
-### Simple Question and Answer app
+### Simple Conversational app
 
-LangChain| OpenAI | Streamlit | HuggingFace
+LangChain| OpenAI Chat | Streamlit | HuggingFace
 
 ## To run this app locally, follow these steps:
 
