@@ -8,3 +8,4 @@ LangChain apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugg
 
 ### BEGINNER LEVEL
 1. Simple QA APP - branch 1_qa_app
+2. Simple Chat App - branch 2_chat_app
