@@ -1,4 +1,4 @@
-import main as st
+import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # If generate button is clicked
     if submit:
         response = answer_query(user_input)
-        print(st.session_state)
+        # print(st.session_state)
         if response:
             st.subheader(":green[Answer:]")
             st.success(response)
