@@ -1,6 +1,6 @@
-### Find SImilar Things For Kids
+### Find SImilar Things
 
-LangChain| OpenAI Embeddings | Streamlit
+LangChain| OpenAI Embeddings | Streamlit | FAISS
 
 ![App](app.png)
 
@@ -9,4 +9,4 @@ LangChain| OpenAI Embeddings | Streamlit
 - Clone the repository
 - `pipenv shell`
 - `pipenv install -r requirement.txt`
-- `streamlit run main.py`
+- `streamlit run streamlit.py`

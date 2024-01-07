@@ -18,5 +18,7 @@ if __name__ == "__main__":
         response = sim_search(user_input)
         if response:
             st.subheader(":green[Top Matches:]")
-            st.success(response)
+            st.success(response[0].page_content
+                       + '\n\n' + response[1].page_content)
+
 
