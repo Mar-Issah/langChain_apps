@@ -1,6 +1,6 @@
-### Simple Conversational app
+### Find SImilar Things For Kids
 
-LangChain| OpenAI Chat | Streamlit | HuggingFace
+LangChain| OpenAI Embeddings | Streamlit
 
 ![App](app.png)
 

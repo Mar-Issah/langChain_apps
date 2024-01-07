@@ -6,10 +6,12 @@ name = "pypi"
 [packages]
 openai = "*"
 langchain = "*"
-huggingface-hub = "*"
 streamlit = "*"
 python-dotenv = "*"
 streamlit-chat = "*"
+tiktoken = "*"
+openpyxl = "*"
+faiss-cpu = "*"
 
 [dev-packages]
 
