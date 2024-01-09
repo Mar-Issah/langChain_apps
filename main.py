@@ -129,9 +129,9 @@ def get_response(query, age, tasktype_option):
 
     # print how the template will be sent to the llm
     # because we have only limit of 200 we only gve a few examples, not all to the model
-    print(new_prompt_template.format(template_userInput=query,template_ageoption=age,template_tasktype_option=tasktype_option))
+    # print(new_prompt_template.format(template_userInput=query,template_ageoption=age,template_tasktype_option=tasktype_option))
 
-    response=llm(new_prompt_template.format(template_userInput=query,template_ageoption=age,template_tasktype_option=tasktype_option))
-    print(response)
+    response=llm(new_prompt_template.format(template_userInput = query,template_ageoption = age, template_tasktype_option = tasktype_option))
+    # print(response)
 
     return response
