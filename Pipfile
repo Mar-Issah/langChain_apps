@@ -8,10 +8,8 @@ openai = "*"
 langchain = "*"
 streamlit = "*"
 python-dotenv = "*"
-streamlit-chat = "*"
-tiktoken = "*"
-openpyxl = "*"
-faiss-cpu = "*"
+langchain-community = "*"
+langchain-openai = "*"
 
 [dev-packages]
 

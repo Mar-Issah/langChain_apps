@@ -1,6 +1,4 @@
 openai
 langchain
 streamlit
-tiktoken
-openpyxl
-faiss-cpu
+langchain_openai

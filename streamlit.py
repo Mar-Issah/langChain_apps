@@ -1,24 +1,29 @@
 import streamlit as st
-from main import sim_search
+from main import get_response
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="LangChain Demo", page_icon=":robot:", layout="centered")
-    st.subheader("Hey there!, I will find you synonyms for whatever you ask.")
+     st.set_page_config(page_title="Marketing Tool",
+                              page_icon='✅',
+                              layout='centered',
+                              initial_sidebar_state='collapsed')
+     with st.form("my_form", clear_on_submit=True):
 
-    def get_input():
-        input_text = st.text_input("You: ", key="input")
-        return input_text
+          st.header("Hey, How can I help you?")
 
-    user_input = get_input()
+          form_input = st.text_area('Enter text', height=275)
+          tasktype_option = st.selectbox(
+               'Please select the action to be performed?',
+               ('Write a sales copy', 'Create a tweet', 'Write a product description'),key=1)
 
-    submit = st.button('Find')
+          age_option= st.selectbox(
+          'For which age group?',
+          ('Kid', 'Adult', 'senior Citizen'),key=2)
+          numberOfWords= st.slider('Words limit', 1, 200, 25)
 
-    # If generate button is clicked
-    if submit:
-        response = sim_search(user_input)
-        if response:
-            st.subheader(":green[Top Matches:]")
-            st.success(response[0].page_content
-                       + '\n\n' + response[1].page_content)
+          submit = st.form_submit_button("Generate")
 
-
+     if submit:      # If generate button is clicked
+          response = get_response(form_input,age_option,tasktype_option)
+          if response:
+               st.subheader(":green[Response:]")
+               st.success(response)
