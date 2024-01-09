@@ -1,8 +1,8 @@
 ### Find SImilar Things
 
-LangChain| OpenAI Embeddings | Streamlit | FAISS
+LangChain| OpenAI | Streamlit
 
-![App](app.png)
+![App](app-4.png)
 
 ## To run this app locally, follow these steps:
 

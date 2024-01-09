@@ -6,9 +6,9 @@ if __name__ == "__main__":
                               page_icon='✅',
                               layout='centered',
                               initial_sidebar_state='collapsed')
-     with st.form("my_form", clear_on_submit=True):
+     with st.form("my_form"):
 
-          st.header("Hey, How can I help you?")
+          st.subheader("Hey, How can I help you?")
 
           form_input = st.text_area('Enter text', height=275)
           tasktype_option = st.selectbox(
