@@ -9,12 +9,10 @@ from langchain.memory import ConversationTokenBufferMemory
 import streamlit as st
 
 
-def get_response(userInput, api_key):
+def get_response(userInput):
     if st.session_state['conversation'] is None:
-
         llm = OpenAI(
             temperature=0,
-            openai_api_key=api_key,
             model_name='gpt-3.5-turbo-instruct'  # 'text-davinci-003' model is depreciated now
         )
         # same as creating the conversation var but in the state
@@ -24,6 +22,6 @@ def get_response(userInput, api_key):
             memory=ConversationSummaryMemory(llm=llm)
         )
 
-    response=st.session_state['conversation'].predict(input=userInput)
-    # print(st.session_state['conversation'].memory.buffer) the summary
-    return response
+        response=st.session_state['conversation'].predict(input=userInput)
+        # print(st.session_state['conversation'].memory.buffer) the summary
+        return response
