@@ -1,8 +1,8 @@
 ### Find SImilar Things
 
-LangChain| OpenAI | Streamlit
+LangChain| OpenAI | Streamlit | Streamlit-chat | ConversationSummaryMemory
 
-![App](app-4.png)
+![App](app.png)
 
 ## To run this app locally, follow these steps:
 
