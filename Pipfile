@@ -10,6 +10,7 @@ streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
+streamlit-chat = "*"
 
 [dev-packages]
 
