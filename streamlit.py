@@ -25,7 +25,7 @@ if __name__ == "__main__":
      with st.sidebar:
           st.title("😎")
           st.write("Click the button below to obtain a summary of your chat.")
-          summarise_btn = st.button("Summarise the conversation", key="summarise", type="secondary", disabled = st.session_state['messages'] == [])
+          summarise_btn = st.button("Summarise the conversation", key="summarise", type="secondary")
 
           if summarise_btn:
                summarise_placeholder = st.write("Below is the summary of our conversation ❤️:\n\n"+st.session_state['conversation'].memory.buffer)
@@ -35,13 +35,9 @@ if __name__ == "__main__":
      # Here we will have a container for user input text box
      container = st.container()
 
-
-     # with container:
-     #      with st.form(key='my_form', clear_on_submit=True):
-               # user_input = st.text_area("Your question goes here:", key='input', height=100)
-               # submit_button = st.form_submit_button(label='Send')
      prompt = st.chat_input("Enter a prompt here")
      if prompt:
+          # append the user prompt ff by the ai repsonse
           st.session_state['messages'].append(prompt)
           model_response=get_response(prompt)
           st.session_state['messages'].append(model_response)
@@ -52,3 +48,5 @@ if __name__ == "__main__":
                          message(st.session_state['messages'][i], is_user=True, key=str(i) + '_user')
                     else:
                          message(st.session_state['messages'][i], key=str(i) + '_AI')
+
+
