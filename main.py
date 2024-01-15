@@ -40,7 +40,7 @@ def get_response(userInput, api_key):
             openai_api_key=api_key,
             model_name='gpt-3.5-turbo-instruct'  # 'text-davinci-003' model is depreciated now, so we are using the openai's recommended model
         )
-
+        # same as creating the conversation var but in the state
         st.session_state['conversation'] = ConversationChain(
             llm=llm,
             verbose=True,
