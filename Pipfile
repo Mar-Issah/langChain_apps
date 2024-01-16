@@ -11,6 +11,8 @@ python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
 streamlit-chat = "*"
+chromadb = "*"
+sentence-transformers = "*"
 
 [dev-packages]
 
