@@ -1,6 +1,5 @@
 #from langchain import OpenAI  #Langchain has recently suggested to use the below import
-# from langchain.llms import OpenAI
-from langchain_community.llms import OpenAI
+from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import (ConversationBufferMemory,
 ConversationSummaryMemory, ConversationBufferWindowMemory)
@@ -17,13 +16,13 @@ def get_response(userInput):
             temperature=0,
             model_name='gpt-3.5-turbo-instruct'  # 'text-davinci-003' model is depreciated now
         )
-        # same as creating the conversation var but in the state
+        # same as creating the conversation var. but in the state
         st.session_state['conversation'] = ConversationChain(
             llm=llm,
             verbose=True,
             memory=ConversationSummaryMemory(llm=llm)
         )
 
-        response=st.session_state['conversation'].predict(input=userInput)
-        # print(st.session_state['conversation'].memory.buffer) the summary
-        return response
+    response = st.session_state['conversation'].predict(input=userInput)
+    # print(st.session_state['conversation'].memory.buffer) the summary
+    return response

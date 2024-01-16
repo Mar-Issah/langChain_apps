@@ -16,9 +16,6 @@ if __name__ == "__main__":
           st.session_state['conversation'] = None
      if 'messages' not in st.session_state:
           st.session_state['messages'] =[]
-     if 'API_Key' not in st.session_state:
-          st.session_state['API_Key'] =''
-
 
      # sidebarbar UI below
      # disable the btn when there are no messages
@@ -48,5 +45,4 @@ if __name__ == "__main__":
                          message(st.session_state['messages'][i], is_user=True, key=str(i) + '_user')
                     else:
                          message(st.session_state['messages'][i], key=str(i) + '_AI')
-
 
