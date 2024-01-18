@@ -1,48 +1,45 @@
 import streamlit as st
-from main import get_response
-from streamlit_chat import message
+from main import get_response, chain
+from langchain_community.document_loaders import PyPDFLoader
+import os
+
 
 if __name__ == "__main__":
      st.set_page_config(page_title="Chat GPT Clone",
-                              page_icon='💬',
+                              page_icon='📖',
                               layout='centered',
-                               initial_sidebar_state='expanded')
+                              )
 
      st.markdown("<h3 style='text-align: center;'>How can I assist you? </h3>", unsafe_allow_html=True)
 
 
-     # initialize the state of the application. We need the conversation summary, messages b/n AI and Human and also the api key the user entered
-     if 'conversation' not in st.session_state:
-          st.session_state['conversation'] = None
-     if 'messages' not in st.session_state:
-          st.session_state['messages'] =[]
+     uploaded_file = st.file_uploader("Choose a file", type=["pdf", "txt"])
+     if uploaded_file is not None:
+          try:
+               # Save the file locally with the original file name and extension
+               file_name, file_extension = os.path.splitext(uploaded_file.name)
+               file_path = os.path.join(os.getcwd(), uploaded_file.name)
 
-     # sidebarbar UI below
-     # disable the btn when there are no messages
-     with st.sidebar:
-          st.title("😎")
-          st.write("Click the button below to obtain a summary of your chat.")
-          summarise_btn = st.button("Summarise the conversation", key="summarise", type="secondary")
+               with open(file_path, "wb") as f:
+                    f.write(uploaded_file.getvalue())
 
-          if summarise_btn:
-               summarise_placeholder = st.write("Below is the summary of our conversation ❤️:\n\n"+st.session_state['conversation'].memory.buffer)
+               st.toast(f"File saved as {uploaded_file.name}", icon='😍')
 
+               # Process the file based on its extension
+               with st.spinner("Processing..."):
+                    if uploaded_file:
+                         retriever = get_response(f'./{uploaded_file.name}')
+                         query = st.text_input("Please ask your question")
+                         relevant_docs = retriever.get_relevant_documents(query)
+                         response = chain.run(input_documents=relevant_docs, question=query)
+                         submit_btn = st.button("Submit", key="submit", type="secondary")
 
-     response_container = st.container()
-     # Here we will have a container for user input text box
-     container = st.container()
-
-     prompt = st.chat_input("Enter a prompt here")
-     if prompt:
-          # append the user prompt ff by the ai repsonse
-          st.session_state['messages'].append(prompt)
-          model_response=get_response(prompt)
-          st.session_state['messages'].append(model_response)
-
-          with response_container:
-               for i in range(len(st.session_state['messages'])):
-                    if (i % 2) == 0:
-                         message(st.session_state['messages'][i], is_user=True, key=str(i) + '_user')
+                         if submit_btn:
+                              st.subheader(":green[Answer:]")
+                              st.success(response)
                     else:
-                         message(st.session_state['messages'][i], key=str(i) + '_AI')
+                         st.warning("Unsupported file type. Only PDF and TXT are supported.")
+
+          except Exception as e:
+               st.error(f"Error: {e}")
 

@@ -10,9 +10,10 @@ streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
-streamlit-chat = "*"
 chromadb = "*"
 sentence-transformers = "*"
+pypdf = "*"
+tiktoken = "*"
 
 [dev-packages]
 
