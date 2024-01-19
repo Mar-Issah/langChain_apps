@@ -2,11 +2,10 @@ from langchain_community.document_loaders import PyPDFDirectoryLoader, PyPDFLoad
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
-from langchain.llms import HuggingFaceHub
 import os
 from langchain.chains.question_answering import load_qa_chain
 from langchain_community.embeddings import OpenAIEmbeddings
-from langchain_community.llms import OpenAI
+from langchain_community.llms import OpenAI, HuggingFaceHub
 
 
 os.environ.get("OPENAI_API_KEY")
@@ -34,7 +33,6 @@ def split_doc(docs, chunk_size = 1536, chunk_overlap = 20):
 # 3 . Text embedding
 embeddings = OpenAIEmbeddings()
 # embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # from hugging face which is free
-# result = embeddings.embed_query("My name is Marsiya")
 
 llm = OpenAI()
 #llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
