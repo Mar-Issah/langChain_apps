@@ -1,6 +1,6 @@
 ### Find SImilar Things
 
-LangChain| OpenAI | Streamlit | Streamlit-chat | ConversationSummaryMemory
+LangChain| OpenAI | Streamlit | Openai | HuggingFaceHub | OpenAIEmbeddings | SentenceTransformerEmbeddings
 
 ![App](app.png)
 

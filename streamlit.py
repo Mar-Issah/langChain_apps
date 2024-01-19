@@ -10,7 +10,7 @@ if __name__ == "__main__":
                               layout='centered',
                               )
 
-     st.markdown("<h3 style='text-align: center;'>How can I assist you? </h3>", unsafe_allow_html=True)
+     st.markdown("<h3 style='text-align: center;'>How can I assist you?/h3>", unsafe_allow_html=True)
 
 
      uploaded_file = st.file_uploader("Choose a file", type=["pdf", "txt"])
@@ -19,9 +19,6 @@ if __name__ == "__main__":
                # Save the file locally with the original file name and extension
                file_name, file_extension = os.path.splitext(uploaded_file.name)
                file_path = os.path.join(os.getcwd(), uploaded_file.name)
-
-               with open(file_path, "wb") as f:
-                    f.write(uploaded_file.getvalue())
 
                st.toast(f"File saved as {uploaded_file.name}", icon='😍')
 

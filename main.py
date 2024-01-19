@@ -5,6 +5,8 @@ from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddi
 from langchain.llms import HuggingFaceHub
 import os
 from langchain.chains.question_answering import load_qa_chain
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.llms import OpenAI
 
 
 os.environ.get("OPENAI_API_KEY")
@@ -23,18 +25,19 @@ def load_doc(file):
 	return documents
 
 # Tranform Documents
-def split_doc(docs, chunk_size = 1000, chunk_overlap = 20):
+def split_doc(docs, chunk_size = 1536, chunk_overlap = 20):
 	text_splitter = RecursiveCharacterTextSplitter (chunk_size=chunk_size,
 	chunk_overlap= chunk_overlap)
 	texts = text_splitter.split_documents(docs)
 	return texts
 
 # 3 . Text embedding
-embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # from hugging face which is free
-result = embeddings.embed_query("My name is Marsiya")
+embeddings = OpenAIEmbeddings()
+# embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # from hugging face which is free
+# result = embeddings.embed_query("My name is Marsiya")
 
-
-llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
+llm = OpenAI()
+#llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
 chain = load_qa_chain(llm, chain_type="stuff")
 
 def get_response(file):
