@@ -1,46 +1,62 @@
 from langchain_community.document_loaders import PyPDFDirectoryLoader, PyPDFLoader, TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 import os
 from langchain.chains.question_answering import load_qa_chain
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.llms import OpenAI, HuggingFaceHub
+from langchain.chains import LLMChain, SimpleSequentialChain, LLMRequestsChain
+from langchain.prompts import PromptTemplate
+from langchain.chains.summarize import load_summarize_chain
+from langchain.docstore.document import Document
+from pprint import pprint
+
 
 
 os.environ.get("OPENAI_API_KEY")
-os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 
-# Load Documents
-# Use the PyPDFDirectoryLoader to load all pdfs in the dir and save it in one document file
-def load_doc(file):
-	# loader = PyPDFDirectoryLoader(dir)
-	_file_name, file_extension = os.path.splitext(file)
-	if file_extension.lower() == ".pdf":
-		loader = PyPDFLoader(file)
-	else:
-		loader = TextLoader(file)
-	documents = loader.load()
-	return documents
+llm = OpenAI(temperature=0.9)
 
-# Tranform Documents
-def split_doc(docs, chunk_size = 1536, chunk_overlap = 20):
-	text_splitter = RecursiveCharacterTextSplitter (chunk_size=chunk_size,
-	chunk_overlap= chunk_overlap)
-	texts = text_splitter.split_documents(docs)
-	return texts
+#This time we are not loading but Reading from the document and saving it in a data var
+with open("./jj_sample.txt") as f:
+    data = f.read()
 
-# 3 . Text embedding
-embeddings = OpenAIEmbeddings()
-# embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # from hugging face which is free
+#When it comes to document processing, breaking a large document into smaller, more manageable chunks is essential
+# Split text
+text_splitter = CharacterTextSplitter()
+texts = text_splitter.split_text(data)
 
-llm = OpenAI()
-#llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
-chain = load_qa_chain(llm, chain_type="stuff")
+# Create multiple documents - we got two documents
+docs = [Document(page_content=t) for t in texts]
+# print(docs)
 
-def get_response(file):
-	docs = load_doc(file)
-	texts = split_doc(docs)
-	db = Chroma.from_documents(texts, embeddings)
-	retriever = db.as_retriever(search_kwargs={"k": 2})
-	return retriever
+# load_summarize_chain is a Utility chain
+# To create an instance of load_summarizer_chain, we need to provide three arguments. irstly, we need to pass the desired large language model that will be used to query the user input. Secondly, we specify the type of langchain chain to be used for summarizing documents. Lastly, we can set the verbose argument to True if we want to see all the intermediate steps involved in processing the user request and generating the output.
+# map reduce summarizes each docs and add all together
+chain = load_summarize_chain(llm, chain_type="map_reduce", verbose=False)
+chain.run(docs)
+
+# ANOTHER Utility chain LLMRequestsChain. Chain that takes in another chain
+# Perform HTTP request using LLMRequestsChain
+template = """
+Extract the answer to the question '{query}' or say "not found" if the information is not available.
+{requests_result}
+"""
+
+PROMPT = PromptTemplate(
+    input_variables=["query", "requests_result"],
+    template=template,
+)
+
+llm=OpenAI()
+# Utility chain LLMRequestsChain. Chain that takes in another chain
+chain = LLMRequestsChain(llm_chain=LLMChain(llm=llm, prompt=PROMPT),verbose=True)
+
+question = "What is the capital of Ghana?"
+inputs = {
+    "query": question,
+    "url": "https://www.google.com/search?q=" + question.replace(" ", "+"),
+}
+print(chain(inputs))

@@ -1,18 +1,16 @@
 import streamlit as st
-from main import get_response, chain
-from langchain_community.document_loaders import PyPDFLoader
-import os
+from main import get_response
 
 
 if __name__ == "__main__":
-     st.set_page_config(page_title="Chat GPT Clone",
-                              page_icon='📖',
+     st.set_page_config(page_title="CSV analyser",
+                              page_icon='🖩',
                               layout='centered')
 
-     st.markdown("<h3 style='text-align: center;'>How can I assist you?</h3>", unsafe_allow_html=True)
+     st.markdown("<h3 style='text-align: center;'>Let's analyse your CSV file</h3>", unsafe_allow_html=True)
 
 
-     uploaded_file = st.file_uploader("Choose a file", type=["pdf", "txt"])
+     uploaded_file = st.file_uploader("Please upload your CSV file", type=["csv"])
      if uploaded_file is not None:
           try:
                # Save the file locally with the original file name and extension
@@ -24,17 +22,14 @@ if __name__ == "__main__":
                # Process the file based on its extension
                with st.spinner("Processing..."):
                     if uploaded_file:
-                         retriever = get_response(f'./{uploaded_file.name}')
-                         query = st.text_input("Please ask your question")
-                         relevant_docs = retriever.get_relevant_documents(query)
-                         response = chain.run(input_documents=relevant_docs, question=query)
+
                          submit_btn = st.button("Submit", key="submit", type="secondary")
 
                          if submit_btn:
                               st.subheader(":green[Answer:]")
-                              st.success(response)
+                              st.success()
                     else:
-                         st.warning("Unsupported file type. Only PDF and TXT are supported.")
+                         st.warning("Unsupported file type. Only CSV is supported.")
 
           except Exception as e:
                st.error(f"Error: {e}")
