@@ -14,4 +14,5 @@ LangChain apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugg
 5. ChatGPT cone - 5_chatgpt_clone
 
 ### INTERMEDIATE LEVEL
-7. Quiz - 6_quiz_app
+6. Quiz - 6_quiz_app
+7. CSV Analyser - 7_csv_analysis
