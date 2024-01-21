@@ -1,6 +1,5 @@
 openai
 langchain
 streamlit
-sentence_transformers
-chromadb
+langchain-experimental
 langchain-community

@@ -1,5 +1,5 @@
 import streamlit as st
-from main import get_response
+from main import query_agent
 
 
 if __name__ == "__main__":
@@ -9,21 +9,15 @@ if __name__ == "__main__":
 
      st.markdown("<h3 style='text-align: center;'>Let's analyse your CSV file</h3>", unsafe_allow_html=True)
 
-
-     uploaded_file = st.file_uploader("Please upload your CSV file", type=["csv"])
-     if uploaded_file is not None:
+     file = st.file_uploader("Please upload your CSV file", type=["csv"])
+     if file is not None:
           try:
-               # Save the file locally with the original file name and extension
-               with open(uploaded_file.name, "wb") as f:
-                    f.write(uploaded_file.getvalue())
-                    st.toast(f"File saved as {uploaded_file.name}", icon='😍')
-
-
                # Process the file based on its extension
                with st.spinner("Processing..."):
-                    if uploaded_file:
-
-                         submit_btn = st.button("Submit", key="submit", type="secondary")
+                    query_agent(file, 'eg')
+                    if file:
+                         query = st.text_area("Enter your query")
+                         submit_btn = st.button("Generate", key="generate", type="secondary")
 
                          if submit_btn:
                               st.subheader(":green[Answer:]")

@@ -10,11 +10,7 @@ streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
-chromadb = "*"
-sentence-transformers = "*"
-pypdf = "*"
-tiktoken = "*"
-bs4 = "*"
+langchain-experimental = "*"
 
 [dev-packages]
 
