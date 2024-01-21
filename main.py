@@ -9,14 +9,14 @@ os.environ.get("OPENAI_API_KEY")
 def query_agent(csv_file, query):
 	# Parse the CSV file and create a Pandas DataFrame from its contents and use to perfrom any data analysis
     df = pd.read_csv(csv_file)
-    print(df)
 
     llm = OpenAI()
 
 	 # Create a Pandas DataFrame agent.
+    # https://python.langchain.com/docs/integrations/toolkits/pandas
     agent = create_pandas_dataframe_agent(llm, df, verbose=True)
 
     #Python REPL: A Python shell used to evaluating and executing Python commands.
     #It takes python code as input and outputs the result. The input python code can be generated from another tool in the LangChain
-    #return agent.run(query)
+    return agent.run(query)
 

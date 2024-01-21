@@ -14,17 +14,12 @@ if __name__ == "__main__":
           try:
                # Process the file based on its extension
                with st.spinner("Processing..."):
-                    query_agent(file, 'eg')
-                    if file:
-                         query = st.text_area("Enter your query")
-                         submit_btn = st.button("Generate", key="generate", type="secondary")
+                    query = st.text_area("Enter your query")
+                    response = query_agent(file, query)
+                    submit_btn = st.button("Generate", key="generate", type="secondary")
 
-                         if submit_btn:
-                              st.subheader(":green[Answer:]")
-                              st.success()
-                    else:
-                         st.warning("Unsupported file type. Only CSV is supported.")
-
+                    if submit_btn:
+                         st.subheader(":green[Answer:]")
+                         st.success(response)
           except Exception as e:
                st.error(f"Error: {e}")
-
