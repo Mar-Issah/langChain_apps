@@ -36,6 +36,6 @@ if submit:
 
         #Display Search Engine Result
         st.subheader("Check Out the DuckDuckGo Search:")
-        with st.expander('Show me 👀'):
+        with st.expander('Click to open'):
             st.info(search_result)
 
