@@ -12,6 +12,7 @@ langchain-community = "*"
 langchain-openai = "*"
 langchain-experimental = "*"
 tabulate = "*"
+duckduckgo-search = "*"
 
 [dev-packages]
 
