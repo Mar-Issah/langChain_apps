@@ -1,6 +1,6 @@
 ### Find SImilar Things
 
-LangChain| OpenAI | Streamlit | Agents
+LangChain| OpenAI | Streamlit | Tool
 
 ![App](app.png)
 
