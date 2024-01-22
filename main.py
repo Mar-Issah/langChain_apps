@@ -2,44 +2,81 @@ import os
 from langchain_community.llms import OpenAI
 #from langchain.llms import OpenAI
 #The above is no longer avialable, so replaced it with the below import
-from langchain_community.chat_models import ChatOpenAI
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from langchain.tools import DuckDuckGoSearchRun
+import asyncio
+from langchain.document_loaders.sitemap import SitemapLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import Pinecone
+from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
+from langchain_community.vectorstores import Chroma
 
 
-os.environ.get("OPENAI_API_KEY")
+# os.environ.get("OPENAI_API_KEY")
+os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 
-def get_script(prompt, video_length, temperature):
-    # Template for generating 'Title' based on the topic of the user
-    title_template = PromptTemplate(
-        input_variables = ['subject'],
-        template='Please come up with a title for a YouTube video on {subject}.'
-        )
-
-    # Template for generating 'Video Script' using DuckDuckGo search engine
-    # Please install DuckDuckGo
-    script_template = PromptTemplate(
-        input_variables = ['title', 'DuckDuckGo_Search','duration'],
-        template='Create a script for a YouTube video based on this title. TITLE: {title} of duration: {duration} minutes using this search data {DuckDuckGo_Search} '
+#Function to fetch data from website
+#https://python.langchain.com/docs/modules/data_connection/document_loaders/integrations/sitemap
+def get_website_data(sitemap_url):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loader = SitemapLoader(
+    sitemap_url
     )
-        #Setting up OpenAI LLM
-    llm = ChatOpenAI(temperature=temperature, model_name='gpt-3.5-turbo')
+    docs = loader.load()
+    return docs
 
-    #Creating chains for 'Title' & 'Video Script'
-    title_chain = LLMChain(llm=llm, prompt=title_template, verbose=True)
-    script_chain = LLMChain(llm=llm, prompt=script_template, verbose=True)
+#Function to split data into smaller chunks
+def split_data(docs):
+    text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size = 1000,
+    chunk_overlap  = 200,
+    length_function = len,
+    )
 
-    # https://python.langchain.com/docs/modules/agents/tools/integrations/ddg
-    search = DuckDuckGoSearchRun()
+    docs_chunks = text_splitter.split_documents(docs)
+    return docs_chunks
 
-    # Executing the chains we created for 'Title'
-    title = title_chain.run(prompt)
+#Function to create embeddings instance
+def create_embeddings():
+    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    return embeddings
 
-    # Executing the chains we created for 'Video Script' by taking help of search engine 'DuckDuckGo'
-    search_result = search.run(prompt)
-    script = script_chain.run(title= title, DuckDuckGo_Search= search_result, duration=video_length)
+# Function to push data to Chroma
+def push_to_chroma(embeddings, chunk_data):
+    db = Chroma.from_documents(chunk_data, embeddings)
+    return db
 
-    # Returning the output
-    return search_result, title, script
+# Function to pull data from chroma
+def pull_from_chroma(db, k=2):
+    retriever = db.as_retriever(search_kwargs={"k": k})
+    return retriever
+
+#Function to push data to Pinecone
+def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings,docs):
+
+    pinecone.init(
+    api_key=pinecone_apikey,
+    environment=pinecone_environment
+    )
+
+    index_name = pinecone_index_name
+    index = Pinecone.from_documents(docs, embeddings, index_name=index_name)
+    return index
+
+#Function to pull index data from Pinecone
+def pull_from_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings):
+
+    pinecone.init(
+    api_key=pinecone_apikey,
+    environment=pinecone_environment
+    )
+
+    index_name = pinecone_index_name
+
+    index = Pinecone.from_existing_index(index_name, embeddings)
+    return index
+
+#This function will help us in fetching the top relevent documents from our vector store - Chroma
+def get_relevant_docs(retriever, query):
+    docs = retriever.get_relevant_documents(query)
+    return docs
 

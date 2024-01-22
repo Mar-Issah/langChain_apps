@@ -3,3 +3,5 @@ langchain
 streamlit
 langchain-experimental
 langchain-community
+sentence-transformers
+chromadb

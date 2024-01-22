@@ -12,6 +12,8 @@ langchain-community = "*"
 langchain-openai = "*"
 langchain-experimental = "*"
 duckduckgo-search = "*"
+sentence-transformers = "*"
+chromadb = "*"
 
 [dev-packages]
 
