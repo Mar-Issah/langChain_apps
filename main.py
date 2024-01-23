@@ -9,7 +9,6 @@ from langchain.vectorstores import Pinecone
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 
-
 # os.environ.get("OPENAI_API_KEY")
 os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 
@@ -18,10 +17,10 @@ os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 def get_website_data(sitemap_url):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loader = SitemapLoader(
-    sitemap_url
-    )
+    loader = SitemapLoader(sitemap_url)
+    loader.requests_kwargs = {'verify': False}
     docs = loader.load()
+    # print(docs)
     return docs
 
 #Function to split data into smaller chunks
@@ -31,8 +30,8 @@ def split_data(docs):
     chunk_overlap  = 200,
     length_function = len,
     )
-
     docs_chunks = text_splitter.split_documents(docs)
+    # print(docs_chunks)
     return docs_chunks
 
 #Function to create embeddings instance
@@ -50,7 +49,7 @@ def pull_from_chroma(db, k=2):
     retriever = db.as_retriever(search_kwargs={"k": k})
     return retriever
 
-#Function to push data to Pinecone
+#Function to push data to Pinecone - if using pinecone
 def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings,docs):
 
     pinecone.init(
@@ -62,7 +61,7 @@ def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,em
     index = Pinecone.from_documents(docs, embeddings, index_name=index_name)
     return index
 
-#Function to pull index data from Pinecone
+#Function to pull index data from Pinecone - if using pinecone
 def pull_from_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings):
 
     pinecone.init(
