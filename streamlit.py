@@ -7,14 +7,11 @@ if __name__ == "__main__":
                               page_icon='🤖',
                               layout='centered')
 
-     st.markdown("<h3 style='text-align: center;'>🤖 WWR Website AI Assistance</h3>", unsafe_allow_html=True)
+     st.markdown("<h3 style='text-align: center;'>🤖 JOB Website AI Assistance</h3>", unsafe_allow_html=True)
 
      # Creating Session State Variable
      if 'HuggingFace_API_Key' not in st.session_state:
           st.session_state['HuggingFace_API_Key'] =''
-     if 'DB' not in st.session_state:
-          st.session_state['DB'] = None
-
 
      #********SIDE BAR*******
      with st.sidebar:
@@ -51,31 +48,21 @@ if __name__ == "__main__":
      prompt = st.text_input('Enter keyword - e.g Job title',key="prompt")  # The box for the text prompt
      document_count = st.slider('No.Of links to return 🔗 - (0 LOW || 5 HIGH)', 0, 5, 2,step=1)
 
-     submit = st.button("Search")
+     # submit = st.button("Search")
 
-     if submit:
-        #Creating embeddings instance
-          embeddings=create_embeddings()
-          st.toast("Embeddings instance creation done...")
-
+     with st.spinner("Searching..."):
+        if st.button("Search"):
           #Pull index data from Chroma
-          # retriever = pull_from_chroma(db, 2)
-          retriever = pull_from_chroma(prompt)
+          relavant_docs = pull_from_chroma(prompt)
           st.toast("Chroma index retrieval done...")
-          st.write(retriever)
-
-          # #Fetch relavant documents from Chroma
-          # relavant_docs = get_relevant_docs(retriever, prompt)
           # st.write(relavant_docs)
 
           #Displaying search results
-          # st.success("Please find the search results :")
-          #Displaying search results
-          # st.write("search results list....")
+          st.success("Please find the search results :")
 
-     # for document in relavant_docs:
-
-     #      st.write("👉**Result : "+ str(relavant_docs.index(document)+1)+"**")
-     #      st.write("**Info**: "+document.page_content)
-     #      st.write("**Link**: "+ document.metadata['source'])
+     for document in relavant_docs:
+          st.write("👉**Result : "+ str(relavant_docs.index(document)+1)+"**")
+          st.write("**Info**: "+document.page_content)
+          st.write("**Link**: "+ document.metadata['source'])
+          st.markdown("-----------------------------------------------------------------------")
 

@@ -2,11 +2,9 @@ import os
 import asyncio
 from langchain.document_loaders.sitemap import SitemapLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Pinecone
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 
-# os.environ.get("OPENAI_API_KEY")
 os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 
 #Function to fetch data from website
@@ -48,34 +46,5 @@ def pull_from_chroma(query):
     docs = db.similarity_search(query)
     print(docs)
     return docs
-    # retriever = db.as_retriever(search_kwargs={"k": k}) params db and k
-    # return retriever
 
-#Function to push data to Pinecone - if using pinecone
-def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings,docs):
-    pinecone.init(
-    api_key=pinecone_apikey,
-    environment=pinecone_environment
-    )
-
-    index_name = pinecone_index_name
-    index = Pinecone.from_documents(docs, embeddings, index_name=index_name)
-    return index
-
-#Function to pull index data from Pinecone - if using pinecone
-def pull_from_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings):
-    pinecone.init(
-    api_key=pinecone_apikey,
-    environment=pinecone_environment
-    )
-
-    index_name = pinecone_index_name
-
-    index = Pinecone.from_existing_index(index_name, embeddings)
-    return index
-
-#This function will help us in fetching the top relevent documents from our vector store - Chroma
-def get_relevant_docs(retriever, query):
-    docs = retriever.get_relevant_documents(query)
-    return docs
 

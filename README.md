@@ -1,6 +1,6 @@
-### Find SImilar Things
+### Website AI assistance
 
-LangChain| OpenAI | Streamlit | Tool
+LangChain| HuggingFae | Streamlit | ChromaDB
 
 ![App](app.png)
 

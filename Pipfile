@@ -10,12 +10,9 @@ streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
-langchain-experimental = "*"
 sentence-transformers = "*"
 chromadb = "*"
 nest-asyncio = "*"
-beautifulsoup4 = "*"
-lxml = "*"
 
 [dev-packages]
 
