@@ -1,4 +1,4 @@
-### Find SImilar Things
+### Quiz app - query your pdf or txt document
 
 LangChain| OpenAI | Streamlit | Openai | HuggingFaceHub | OpenAIEmbeddings | SentenceTransformerEmbeddings
 
