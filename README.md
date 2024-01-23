@@ -16,3 +16,4 @@ LangChain Apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugg
 ### INTERMEDIATE
 6. Quiz - 6_quiz_app
 7. CSV Analyser - 7_csv_analysis
+8. Video Script writing tool - 8_video_script
