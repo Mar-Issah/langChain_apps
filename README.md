@@ -1,4 +1,4 @@
-### Find SImilar Things
+### CSV Analyser
 
 LangChain| OpenAI | Streamlit | Agents
 
