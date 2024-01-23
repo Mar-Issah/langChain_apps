@@ -4,8 +4,10 @@ from langchain.document_loaders.sitemap import SitemapLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
+import streamlit as st
 
-os.environ.get("HUGGINGFACEHUB_API_TOKEN")
+
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = st.session_state['HuggingFace_API_Key']
 
 #Function to fetch data from website
 #https://python.langchain.com/docs/modules/data_connection/document_loaders/integrations/sitemap
@@ -36,15 +38,12 @@ def create_embeddings():
 
 # Function to push data to Chroma
 def push_to_chroma(embeddings, chunk_data):
-    # db = Chroma.from_documents(chunk_data, embeddings, persist_directory="./chroma_db")
-    # return db
     Chroma.from_documents(chunk_data, embeddings, persist_directory="./chroma_db")
 
 # Function to pull data from chroma
 def pull_from_chroma(query):
     db = Chroma(persist_directory="./chroma_db", embedding_function= create_embeddings())
     docs = db.similarity_search(query)
-    print(docs)
     return docs
 
 

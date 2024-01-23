@@ -57,12 +57,16 @@ if __name__ == "__main__":
           st.toast("Chroma index retrieval done...")
           # st.write(relavant_docs)
 
-          #Displaying search results
-          st.success("Please find the search results :")
-
-     for document in relavant_docs:
-          st.write("👉**Result : "+ str(relavant_docs.index(document)+1)+"**")
-          st.write("**Info**: "+document.page_content)
-          st.write("**Link**: "+ document.metadata['source'])
-          st.markdown("-----------------------------------------------------------------------")
+     if not load_button:
+          if st.session_state['HuggingFace_API_Key'] !="":
+               #Displaying search results
+               st.success("Please find the search results :")
+               for index in range(min(document_count, len(relavant_docs))):
+                    document = relavant_docs[index]
+                    st.write("👉**Result : " + str(index + 1) + "**")
+                    st.write("**Info**: " + document.page_content)
+                    st.write("**Link**: " + document.metadata['source'])
+                    st.markdown("-----------------------------------------------------------------------")
+          else:
+               st.sidebar.error("Ooopssss!!! Please provide API key.....")
 
