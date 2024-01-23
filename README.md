@@ -1,5 +1,4 @@
-### Find SImilar Things
-
+### Create a marketing campaign
 LangChain| OpenAI | Streamlit
 
 ![App](app-4.png)
