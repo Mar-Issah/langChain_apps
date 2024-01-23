@@ -1,7 +1,4 @@
 import os
-from langchain_community.llms import OpenAI
-#from langchain.llms import OpenAI
-#The above is no longer avialable, so replaced it with the below import
 import asyncio
 from langchain.document_loaders.sitemap import SitemapLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -18,7 +15,7 @@ def get_website_data(sitemap_url):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loader = SitemapLoader(sitemap_url)
-    loader.requests_kwargs = {'verify': False}
+    loader.requests_kwargs = {'verify': './cacert.pem'}
     docs = loader.load()
     # print(docs)
     return docs
@@ -41,17 +38,21 @@ def create_embeddings():
 
 # Function to push data to Chroma
 def push_to_chroma(embeddings, chunk_data):
-    db = Chroma.from_documents(chunk_data, embeddings)
-    return db
+    # db = Chroma.from_documents(chunk_data, embeddings, persist_directory="./chroma_db")
+    # return db
+    Chroma.from_documents(chunk_data, embeddings, persist_directory="./chroma_db")
 
 # Function to pull data from chroma
-def pull_from_chroma(db, k=2):
-    retriever = db.as_retriever(search_kwargs={"k": k})
-    return retriever
+def pull_from_chroma(query):
+    db = Chroma(persist_directory="./chroma_db", embedding_function= create_embeddings())
+    docs = db.similarity_search(query)
+    print(docs)
+    return docs
+    # retriever = db.as_retriever(search_kwargs={"k": k}) params db and k
+    # return retriever
 
 #Function to push data to Pinecone - if using pinecone
 def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings,docs):
-
     pinecone.init(
     api_key=pinecone_apikey,
     environment=pinecone_environment
@@ -63,7 +64,6 @@ def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,em
 
 #Function to pull index data from Pinecone - if using pinecone
 def pull_from_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings):
-
     pinecone.init(
     api_key=pinecone_apikey,
     environment=pinecone_environment

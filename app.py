@@ -4,13 +4,10 @@ import asyncio
 import os
 from langchain.document_loaders.sitemap import SitemapLoader
 from langchain_community.document_loaders import WebBaseLoader
-import urllib3
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Pinecone
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 from dotenv import load_dotenv
-
 
 load_dotenv()
 nest_asyncio.apply()
@@ -23,27 +20,23 @@ nest_asyncio.apply()
 
 
 
-loader = SitemapLoader("https://weworkremotely.com/sitemap.xml")
+loader = SitemapLoader("https://jobs.apple.com/sitemap/sitemap-jobs-en-gb.xml")
 
-loader.requests_kwargs = {'verify': './cacert.pem'}
+loader.requests_kwargs = {'verify': False}
 docs = loader.load()
-print(docs)
+text_splitter = RecursiveCharacterTextSplitter(
+chunk_size = 1000,
+chunk_overlap  = 200,
+length_function = len,
+)
+docs_chunks = text_splitter.split_documents(docs)
+embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+# load it into Chroma
+db2 = Chroma.from_documents(docs_chunks, embeddings, persist_directory="./chroma_db")
+print('done...')
 
 
-loader = WebBaseLoader("https://weworkremotely.com/sitemap.xml")
-# print(loader)
-# loader.requests_kwargs = {'verify':False}
-# loader.default_parser = "xml"
-# data = loader.load()
-#print(data)
-# text_splitter = RecursiveCharacterTextSplitter(
-# chunk_size = 1000,
-# chunk_overlap  = 200,
-# length_function = len,
-# )
-# docs_chunks = text_splitter.split_documents(data)
-# embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-# db = Chroma.from_documents(docs_chunks, embeddings)
-# retriever = db.as_retriever(search_kwargs={"k": 2})
-# docs = retriever.get_relevant_documents("engineer")
+# db3=Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
+# docs = db3.similarity_search("software developers from countries that emphasize learning a second language")
 # print(docs)
+
