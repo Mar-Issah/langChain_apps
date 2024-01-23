@@ -7,7 +7,7 @@ from langchain_community.vectorstores import Chroma
 import streamlit as st
 
 
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = st.session_state['HuggingFace_API_Key']
+os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 
 #Function to fetch data from website
 #https://python.langchain.com/docs/modules/data_connection/document_loaders/integrations/sitemap
