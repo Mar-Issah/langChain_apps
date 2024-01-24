@@ -111,6 +111,7 @@ def get_answer(docs,user_input):
 
 
 def predict(query_result):
+    # load from the model we created
     Fitmodel = joblib.load('modelsvm.pk1')
     result=Fitmodel.predict([query_result])
     return result[0]

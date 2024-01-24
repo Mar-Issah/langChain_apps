@@ -42,22 +42,22 @@ def main():
         #Button to create a ticket with respective department
         button = st.button("Do you want to Submit ticket?")
 
-     #    if button:
-     #        #Get Response
-     #        embeddings = create_embeddings()
-     #        query_result = embeddings.embed_query(user_input)
+        if button:
+            #Get Response
+            embeddings = create_embeddings()
+            query_result = embeddings.embed_query(user_input)
 
-     #        #loading the ML model, so that we can use it to predit the class to which this compliant belongs to...
-     #        department_value = predict(query_result)
-     #        st.write("your ticket has been sumbitted to : "+department_value)
+            #loading the ML model, so that we can use it to predit the class to which this compliant belongs to...
+            department_value = predict(query_result)
+            st.write("your ticket has been sumbitted to : "+department_value)
 
-     #        #Appending the tickets to below list, so that we can view/use them later on...
-     #        if department_value=="HR":
-     #            st.session_state['HR_tickets'].append(user_input)
-     #        elif department_value=="IT":
-     #            st.session_state['IT_tickets'].append(user_input)
-     #        else:
-     #            st.session_state['Transport_tickets'].append(user_input)
+            #Appending the tickets to below list, so that we can view/use them later on...
+            if department_value=="HR":
+                st.session_state['HR_tickets'].append(user_input)
+            elif department_value=="IT":
+                st.session_state['IT_tickets'].append(user_input)
+            else:
+                st.session_state['Transport_tickets'].append(user_input)
 
 
 
