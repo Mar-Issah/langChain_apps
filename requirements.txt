@@ -1,7 +1,12 @@
 openai
 langchain
 streamlit
-langchain-experimental
 langchain-community
 sentence-transformers
-chromadb
+tiktoken
+python-dotenv
+pinecone-client
+pypdf
+joblib
+pandas
+scikit-learn

@@ -13,6 +13,12 @@ langchain-openai = "*"
 sentence-transformers = "*"
 chromadb = "*"
 nest-asyncio = "*"
+tiktoken = "*"
+pinecone-client = "*"
+pandas = "*"
+pypdf = "*"
+joblib = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
