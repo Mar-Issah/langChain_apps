@@ -14,20 +14,21 @@ def main():
     # Extract the whole text from the uploaded pdf file
     if pdf is not None:
         with st.spinner('Wait for it...'):
-            text=read_pdf_data(pdf)
+            text = read_pdf_data(pdf)
             st.toast("👉Reading PDF done")
 
             # Create chunks
             docs_chunks=split_data(text)
-            st.write(docs_chunks)
+            # st.write(docs_chunks)
             st.toast("👉Splitting data into chunks done")
 
             # Create the embeddings
-            embeddings=create_embeddings_load_data()
-            st.write("👉Creating embeddings instance done")
+            embeddings=create_embeddings()
+            st.toast("👉Creating embeddings instance done")
 
             # Build the vector store (Push the PDF data embeddings)
-            push_to_pinecone("b115c8b2-fca0-4e6f-b0d3-07cc29935642","us-west1-gcp-free","tickets",embeddings,docs_chunks)
+            # index is the name of the pinecone index in pinecone.io
+            push_to_pinecone("automatic-ticket-tool",embeddings,docs_chunks)
 
         st.success("Successfully pushed the embeddings to Pinecone")
 

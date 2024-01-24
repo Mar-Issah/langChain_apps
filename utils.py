@@ -3,14 +3,16 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain.llms import OpenAI
-import pinecone
-from langchain.vectorstores import Pinecone
+# import pinecone
+from langchain.vectorstores import Pinecone as pc
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from langchain.chains.question_answering import load_qa_chain
 from langchain.callbacks import get_openai_callback
 import joblib
 import os
+# since there have been changes import Pinecone directly from Pinecone and alias above as pc from lc
+from pinecone import Pinecone
 
 
 pinecone_api_key=os.environ["PINECONE_API_KEY"]
@@ -33,38 +35,35 @@ def split_data(text):
     return docs_chunks
 
 #Create embeddings instance
-def create_embeddings_load_data():
+def create_embeddings():
     #embeddings = OpenAIEmbeddings()
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
     return embeddings
 
 #Function to push data to Pinecone
-def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings,docs):
-    pinecone.init(
-    api_key=pinecone_apikey,
-    environment=pinecone_environment
-    )
-
+def push_to_pinecone(pinecone_index_name, embeddings, docs):
+    # pineone.init below is no longer supported
+    # pinecone.init(
+    # api_key=pinecone_api_key,
+    # environment=pinecone_environment
+    # )
+    Pinecone(api_key=pinecone_api_key)
     index_name = pinecone_index_name
-    index = Pinecone.from_documents(docs, embeddings, index_name=index_name)
+    index = pc.from_documents(docs, embeddings, index_name=index_name)
     return index
 
 
 
 
 #*********Functions for Model related tasks************
-#Read dataset for model creation
+#Read dataset for model creation - retrun a df
 def read_data(data):
     df = pd.read_csv(data,delimiter=',', header=None)
     return df
 
-#Create embeddings instance
-def get_embeddings():
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embeddings
-
+#Create embeddings instance - fxn above
 #Generating embeddings for our input dataset
-def create_embeddings(df,embeddings):
+def create_dataset_embeddings(df, embeddings):
     df[2] = df[0].apply(lambda x: embeddings.embed_query(x))
     return df
 
@@ -83,27 +82,24 @@ def get_score(svm_classifier,sentences_test,labels_test):
 
 
 
-
 #*******UTILs FOR USERS****************
 #Function to pull index data from Pinecone...
-def pull_from_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings):
-
-    pinecone.init(
-    api_key=pinecone_apikey,
-    environment=pinecone_environment
-    )
-
+def pull_from_pinecone(pinecone_index_name,embeddings):
+    # pinecone.init(
+    # api_key=pinecone_apikey,
+    # environment=pinecone_environment
+    # )
+    Pinecone(api_key=pinecone_api_key)
     index_name = pinecone_index_name
-
-    index = Pinecone.from_existing_index(index_name, embeddings)
+    index = pc.from_existing_index(index_name, embeddings)
     return index
 
-def create_embeddings():
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embeddings
+# def create_embeddings():
+#     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+#     return embeddings
 
 #This function will help us in fetching the top relevent documents from our vector store - Pinecone Index
-def get_similar_docs(index,query,k=2):
+def get_similar_docs(index, query,k=2):
     similar_docs = index.similarity_search(query, k=k)
     return similar_docs
 
