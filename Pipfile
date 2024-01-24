@@ -11,12 +11,8 @@ python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
 sentence-transformers = "*"
-tiktoken = "*"
-pinecone-client = "*"
 pandas = "*"
 pypdf = "*"
-joblib = "*"
-scikit-learn = "*"
 
 [dev-packages]
 

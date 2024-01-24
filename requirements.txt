@@ -6,7 +6,3 @@ sentence-transformers
 tiktoken
 python-dotenv
 pinecone-client
-pypdf
-joblib
-pandas
-scikit-learn
