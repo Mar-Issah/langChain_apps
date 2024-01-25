@@ -1,6 +1,6 @@
 ### Website AI assistance
 
-LangChain| HuggingFae | Streamlit | ChromaDB
+LangChain| HuggingFace | Streamlit | Pinecone
 
 ![App](app.png)
 
@@ -9,4 +9,4 @@ LangChain| HuggingFae | Streamlit | ChromaDB
 - Clone the repository
 - `pipenv shell`
 - `pipenv install -r requirement.txt`
-- `streamlit run streamlit.py`
+- `streamlit run Home.py`
