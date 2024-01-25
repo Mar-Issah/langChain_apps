@@ -5,4 +5,5 @@ langchain-community
 sentence-transformers
 tiktoken
 python-dotenv
-pinecone-client
+lancedb
+pypdf
