@@ -46,7 +46,7 @@ def create_embeddings_load_data():
 # push to lancedb
 def push_to_lancedb(embeddings):
     db = lancedb.connect("/lancedb")
-    # sample data which will be overwritten when ne dos are uploaded
+    # sample data which will be overwritten when the docs are uploaded
     table = db.create_table(
         "resumes",
         data=[
