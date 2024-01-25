@@ -13,6 +13,9 @@ langchain-openai = "*"
 sentence-transformers = "*"
 pandas = "*"
 pypdf = "*"
+pinecone-client = "*"
+tiktoken = "*"
+lancedb = "*"
 
 [dev-packages]
 

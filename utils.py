@@ -1,117 +1,96 @@
-from pypdf import PdfReader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
-from langchain.llms import OpenAI
-# import pinecone
 from langchain.vectorstores import Pinecone as pc
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from langchain.chains.question_answering import load_qa_chain
-from langchain.callbacks import get_openai_callback
-import joblib
-import os
-# since there have been changes import Pinecone directly from Pinecone and alias above as pc from lc
+from langchain.llms import OpenAI
+from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
+from langchain.schema import Document
+import pinecone
 from pinecone import Pinecone
+from pypdf import PdfReader
+from langchain.llms.openai import OpenAI
+from langchain.chains.summarize import load_summarize_chain
+from langchain.llms import HuggingFaceHub
+import time
+import os
 
+PINECONE_API_KEY=os.environ["PINECONE_API_KEY"]
 
-pinecone_api_key=os.environ["PINECONE_API_KEY"]
-
-
-#**********Functions to load data to PINECONE************
-#Read PDF data
-def read_pdf_data(pdf_file):
-    pdf_page = PdfReader(pdf_file)
+#Extract Information from PDF file
+def get_pdf_text(pdf_doc):
     text = ""
-    for page in pdf_page.pages:
+    pdf_reader = PdfReader(pdf_doc)
+    for page in pdf_reader.pages:
         text += page.extract_text()
     return text
 
-#Split data into chunks
-def split_data(text):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
-    docs = text_splitter.split_text(text)
-    docs_chunks =text_splitter.create_documents(docs)
-    return docs_chunks
+
+
+# iterate over files in
+# that user uploaded PDF files, one by one
+def create_docs(user_pdf_list, unique_id):
+    docs=[]
+    # each pdf file is a doc. We are creating our own Document with it
+    for filename in user_pdf_list:
+
+        chunks=get_pdf_text(filename)
+
+        #Adding items to our list - Adding data & its metadata
+        docs.append(Document(
+            page_content=chunks,
+            metadata={"name": filename.name,"id":filename.file_id,"type=":filename.type,"size":filename.size,"unique_id":unique_id},
+        ))
+
+    return docs # Document chunks list
+
 
 #Create embeddings instance
-def create_embeddings():
+def create_embeddings_load_data():
     #embeddings = OpenAIEmbeddings()
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
     return embeddings
 
-#Function to push data to Pinecone
-def push_to_pinecone(pinecone_index_name, embeddings, docs):
-    # pineone.init below is no longer supported
-    # pinecone.init(
-    # api_key=pinecone_api_key,
-    # environment=pinecone_environment
-    # )
-    Pinecone(api_key=pinecone_api_key)
+
+#Function to push data to Vector Store - Pinecone here
+# Pinecone has eliminated .init method
+def push_to_pinecone(pinecone_index_name,embeddings,docs):
+    Pinecone(api_key=PINECONE_API_KEY)
     index_name = pinecone_index_name
     index = pc.from_documents(docs, embeddings, index_name=index_name)
     return index
 
 
-
-
-#*********Functions for Model related tasks************
-#Read dataset for model creation - retrun a df
-def read_data(data):
-    df = pd.read_csv(data,delimiter=',', header=None)
-    return df
-
-#Create embeddings instance - fxn above
-#Generating embeddings for our input dataset
-def create_dataset_embeddings(df, embeddings):
-    df[2] = df[0].apply(lambda x: embeddings.embed_query(x))
-    return df
-
-#Splitting the data into train & test
-def split_train_test__data(df_sample):
-    # Split into training and testing sets
-    sentences_train, sentences_test, labels_train, labels_test = train_test_split(
-    list(df_sample[2]), list(df_sample[1]), test_size=0.25, random_state=0)
-    print(len(sentences_train))
-    return sentences_train, sentences_test, labels_train, labels_test
-
-#Get the accuracy score on test data
-def get_score(svm_classifier,sentences_test,labels_test):
-    score = svm_classifier.score(sentences_test, labels_test)
-    return score
-
-
-
-#*******UTILs FOR USERS****************
-#Function to pull index data from Pinecone...
+#Function to pull infrmation from Vector Store - Pinecone here
 def pull_from_pinecone(pinecone_index_name,embeddings):
+   # Pinecone has eliminated .init method
     # pinecone.init(
     # api_key=pinecone_apikey,
     # environment=pinecone_environment
     # )
-    Pinecone(api_key=pinecone_api_key)
-    index_name = pinecone_index_name
-    index = pc.from_existing_index(index_name, embeddings)
+    Pinecone(api_key=PINECONE_API_KEY)
+    index = pc.from_existing_index(pinecone_index_name, embeddings)
     return index
 
-# def create_embeddings():
-#     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-#     return embeddings
-
-#This function will help us in fetching the top relevent documents from our vector store - Pinecone Index
-def get_similar_docs(index, query,k=2):
-    similar_docs = index.similarity_search(query, k=k)
-    return similar_docs
-
-def get_answer(docs,user_input):
-    chain = load_qa_chain(OpenAI(), chain_type="stuff")
-    with get_openai_callback() as cb:
-        response = chain.run(input_documents=docs, question=user_input)
-    return response
 
 
-def predict(query_result):
-    # load from the model we created
-    Fitmodel = joblib.load('modelsvm.pk1')
-    result=Fitmodel.predict([query_result])
-    return result[0]
+#Function to help us get relavant documents from vector store - based on user input
+def similar_docs(query, k, pinecone_index_name, embeddings, unique_id):
+    # Pinecone has eliminated .init method
+    # pinecone.init(
+    # api_key=pinecone_apikey,
+    # environment=pinecone_environment
+    # )
+    Pinecone(api_key=PINECONE_API_KEY)
+    index = pull_from_pinecone(pinecone_index_name,embeddings)
+    # similarity_search_with_score returns with score % assign to each seacrh doc
+    # similar_docs = index.similarity_search_with_score(query, int(k),{"unique_id":unique_id})
+    docs = index.similarity_search(query)
+    print(docs)
+    return docs
+    # return similar_docs
+
+
+# Helps us get the summary of a document
+def get_summary(current_doc):
+    llm = OpenAI(temperature=0)
+    #llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
+    chain = load_summarize_chain(llm, chain_type="map_reduce")
+    summary = chain.run([current_doc])
+    return summary
