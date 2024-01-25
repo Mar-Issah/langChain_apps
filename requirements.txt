@@ -5,3 +5,4 @@ langchain-experimental
 langchain-community
 sentence-transformers
 chromadb
+nest-asyncio
