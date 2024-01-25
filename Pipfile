@@ -8,6 +8,8 @@ openai = "*"
 langchain = "*"
 huggingface-hub = "*"
 streamlit = "*"
+langchain-community = "*"
+langchain-openai = "*"
 
 [dev-packages]
 
