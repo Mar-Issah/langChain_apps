@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
           st.subheader("Hey, How can I help you?")
 
-          form_input = st.text_area('Enter text', height=275, placeholder='Who is a mother?')
+          form_input = st.text_area('Enter text', height=275)
           tasktype_option = st.selectbox(
                'Please select the action to be performed?',
                ('Write a sales copy', 'Create a tweet', 'Write a product description'),key=1)
