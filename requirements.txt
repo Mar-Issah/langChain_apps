@@ -4,3 +4,4 @@ streamlit
 sentence_transformers
 chromadb
 langchain-community
+tiktoken
