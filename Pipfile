@@ -13,6 +13,7 @@ langchain-openai = "*"
 sentence-transformers = "*"
 chromadb = "*"
 nest-asyncio = "*"
+tiktoken = "*"
 
 [dev-packages]
 
