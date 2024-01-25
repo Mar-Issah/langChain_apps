@@ -56,7 +56,7 @@ if __name__ == "__main__":
           relavant_docs = pull_from_chroma(prompt)
           st.toast("Chroma index retrieval done...")
           # st.write(relavant_docs)
-     if prompt:
+     if prompt and relavant_docs:
           if not load_button:
                if st.session_state['HuggingFace_API_Key'] !="":
                     #Displaying search results
@@ -64,7 +64,8 @@ if __name__ == "__main__":
                     for index in range(min(document_count, len(relavant_docs))):
                          document = relavant_docs[index]
                          st.write("👉**Result : " + str(index + 1) + "**")
-                         st.write("**Info**: " + document.page_content)
+                         st.write("**Info**: " +get_summary(relavant_docs[index]))
+                         # st.write("**Info**: " + document.page_content)
                          st.write("**Link**: " + document.metadata['source'])
                          st.markdown("-----------------------------------------------------------------------")
                else:

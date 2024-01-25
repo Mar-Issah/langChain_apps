@@ -4,10 +4,12 @@ from langchain.document_loaders.sitemap import SitemapLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
-import streamlit as st
+from langchain.llms import OpenAI
+from langchain.chains.summarize import load_summarize_chain
 
 
 os.environ.get("HUGGINGFACEHUB_API_TOKEN")
+os.environ.get("OPENAI_API_KEY")
 
 #Function to fetch data from website
 #https://python.langchain.com/docs/modules/data_connection/document_loaders/integrations/sitemap
@@ -47,3 +49,10 @@ def pull_from_chroma(query):
     return docs
 
 
+# Helps us get the summary of a document
+def get_summary(current_doc):
+    llm = OpenAI(temperature=0)
+    #llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
+    chain = load_summarize_chain(llm, chain_type="map_reduce")
+    summary = chain.run([current_doc])
+    return summary
