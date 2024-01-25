@@ -7,7 +7,7 @@ if __name__ == "__main__":
 	st.header("Simple QA App")
 
 	def get_input():
-			input_text = st.text_input("You: ", key="input", placeholder="Hi there"!)
+			input_text = st.text_input("You: ", key="input", placeholder="Hi there!")
 			return input_text
 
 	user_input= get_input()
