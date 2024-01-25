@@ -1,6 +1,6 @@
 ### HR - Resume Screening Assistance
 
-LangChain | Streamlit | LanceDB | Openai
+LangChain | Streamlit | LanceDB | Openai | load_summarize_chain
 
 ![App](app.png)
 

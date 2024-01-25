@@ -40,33 +40,26 @@ def main():
             # using already created index automatic-ticket-tool
             table = push_to_lancedb(embeddings)
 
-            #Fecth relavant documents from PINECONE
-            # using already created index automatic-ticket-tool
-            # relavant_docs = similar_docs_lancedb(job_description,document_count,"automatic-ticket-tool", embeddings, st.session_state['unique_id'])
+            #Fecth relavant documents from LanceDB
             relavant_docs = similar_docs_lancedb(job_description,table,embeddings,final_docs_list)
 
-            st.write(relavant_docs)
+            #st.write(relavant_docs)
 
             #Introducing a line separator
             st.write(":heavy_minus_sign:" * 30)
+            st.success(f"Find below the {document_count} Resumes")
 
-            #For each item in relavant docs - we are displaying some info of it on the UI
-        #     for item in range(len(relavant_docs)):
-        #         st.subheader("👉 "+str(item+1))
+            # For each item in relavant docs - we are displaying some info of it on the UI
+            for idx, resume in enumerate(relavant_docs[:int(document_count)]):
+                st.subheader("👉 Resume "+str(idx+1))
+                # st.write(resume.page_content)
 
-        #         #Displaying Filepath
-        #         st.write("**File** : "+relavant_docs[item][0].metadata['name'])
+                #Gets the summary of the current item using 'get_summary' function that we have created which uses LLM & Langchain chain
+                summary = get_summary(relavant_docs[idx])
+                print([relavant_docs[idx]])
+                st.write("**Summary** : "+summary)
 
-        #         #Introducing Expander feature
-        #         with st.expander('Show me 👀'):
-        #             st.info("**Match Score** : "+str(relavant_docs[item][1]))
-        #             #st.write("***"+relavant_docs[item][0].page_content)
-
-        #             #Gets the summary of the current item using 'get_summary' function that we have created which uses LLM & Langchain chain
-        #             summary = get_summary(relavant_docs[item][0])
-        #             st.write("**Summary** : "+summary)
-
-        # st.success("Hope I was able to save your time❤️")
+        st.success("Hope I was able to save your time❤️")
 
 
 #Invoking main function

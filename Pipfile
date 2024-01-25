@@ -11,11 +11,10 @@ python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
 sentence-transformers = "*"
-pandas = "*"
 pypdf = "*"
-pinecone-client = "==2.2.4"
 tiktoken = "*"
 lancedb = "*"
+bs4 = "*"
 
 [dev-packages]
 
