@@ -1,4 +1,4 @@
-from langchain.vectorstores import Pinecone as pc
+from langchain.vectorstores import LanceDB, Pinecone as pc
 from langchain.llms import OpenAI
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain.schema import Document
@@ -10,6 +10,8 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.llms import HuggingFaceHub
 import time
 import os
+import lancedb
+
 
 PINECONE_API_KEY=os.environ["PINECONE_API_KEY"]
 
@@ -47,6 +49,33 @@ def create_embeddings_load_data():
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
     return embeddings
 
+# push to lancedb
+def push_to_lancedb(embeddings):
+    db = lancedb.connect("/lancedb")
+    # sample data which will be overwritten when ne dos are uploaded
+    table = db.create_table(
+        "resumes",
+        data=[
+            {
+                "vector": embeddings.embed_query("Hello World"),
+                "text": "Hello World",
+                "id": "1",
+            }
+        ],
+        mode="overwrite",
+    )
+    return table
+
+def pull_from_lancedb(table, embeddings, docs):
+    docsearch = LanceDB.from_documents(documents=docs, embedding = embeddings, connection=table)
+    return docsearch
+
+def similar_docs_lancedb(query, table, embeddings, docs):
+  docsearch = pull_from_lancedb(table, embeddings, docs)
+  similar_docs = docsearch.similarity_search(query)
+  print(similar_docs)
+  return similar_docs
+
 
 #Function to push data to Vector Store - Pinecone here
 # Pinecone has eliminated .init method
@@ -60,10 +89,6 @@ def push_to_pinecone(pinecone_index_name,embeddings,docs):
 #Function to pull infrmation from Vector Store - Pinecone here
 def pull_from_pinecone(pinecone_index_name,embeddings):
    # Pinecone has eliminated .init method
-    # pinecone.init(
-    # api_key=pinecone_apikey,
-    # environment=pinecone_environment
-    # )
     Pinecone(api_key=PINECONE_API_KEY)
     index = pc.from_existing_index(pinecone_index_name, embeddings)
     return index
@@ -71,20 +96,14 @@ def pull_from_pinecone(pinecone_index_name,embeddings):
 
 
 #Function to help us get relavant documents from vector store - based on user input
-def similar_docs(query, k, pinecone_index_name, embeddings, unique_id):
+def similar_docs_pinecone(query, k, pinecone_index_name, embeddings, unique_id):
     # Pinecone has eliminated .init method
-    # pinecone.init(
-    # api_key=pinecone_apikey,
-    # environment=pinecone_environment
-    # )
     Pinecone(api_key=PINECONE_API_KEY)
     index = pull_from_pinecone(pinecone_index_name,embeddings)
     # similarity_search_with_score returns with score % assign to each seacrh doc
-    # similar_docs = index.similarity_search_with_score(query, int(k),{"unique_id":unique_id})
-    docs = index.similarity_search(query)
-    print(docs)
-    return docs
-    # return similar_docs
+    similar_docs = index.similarity_search_with_score(query, int(k),{"unique_id":unique_id})
+    # similar_docs = index.similarity_search(query, filter = {"unique_id":unique_id})
+    return similar_docs
 
 
 # Helps us get the summary of a document

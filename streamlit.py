@@ -38,11 +38,12 @@ def main():
 
             #Push data to PINECONE
             # using already created index automatic-ticket-tool
-            # push_to_pinecone("automatic-ticket-tool",embeddings,final_docs_list)
+            table = push_to_lancedb(embeddings)
 
             #Fecth relavant documents from PINECONE
             # using already created index automatic-ticket-tool
-            relavant_docs = similar_docs(job_description,document_count,"automatic-ticket-tool", embeddings, st.session_state['unique_id'])
+            # relavant_docs = similar_docs_lancedb(job_description,document_count,"automatic-ticket-tool", embeddings, st.session_state['unique_id'])
+            relavant_docs = similar_docs_lancedb(job_description,table,embeddings,final_docs_list)
 
             st.write(relavant_docs)
 

@@ -1,6 +1,6 @@
-### Website AI assistance
+### HR - Resume Screening Assistance
 
-LangChain| HuggingFae | Streamlit | ChromaDB
+LangChain | Streamlit | LanceDB | Openai
 
 ![App](app.png)
 
