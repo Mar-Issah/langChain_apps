@@ -1,4 +1,4 @@
-# LangChain apps
+# LangChain Apps
 
 LangChain Apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, HuggingFace
 
