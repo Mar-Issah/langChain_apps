@@ -1,27 +1,34 @@
 import streamlit as st
-from main import getLLMResponse
-
-if __name__ == "__main__":
-	st.set_page_config(page_title="Generate Emails",
-						page_icon='📧',
-						layout='centered',
-						initial_sidebar_state='collapsed')
-	st.header("Generate your Emails 📧")
-
-	topic = st.text_area('Enter the message', height=175)
-
-	#Creating columns for the UI - To receive inputs from user
-	col1, col2, col3 = st.columns([10, 10, 5])
-	with col1:
-		email_sender = st.text_input('Sender Name')
-	with col2:
-		email_recipient = st.text_input('Recipient Name')
-	with col3:
-		email_style = st.selectbox('Writing Style', ('Formal', 'Appreciating', 'Not Satisfied', 'Neutral'), index=0)
+from dotenv import load_dotenv
+from utils import *
 
 
-	submit = st.button("Generate")
+if __name__ == '__main__':
+    load_dotenv()
 
-	#When 'Generate' button is clicked, execute the below code
-	if submit:
-		st.write(getLLMResponse(topic, email_sender, email_recipient,email_style))
+    st.set_page_config(page_title="Invoice Extraction Bot")
+    st.title("Invoice Extraction Bot...💁 ")
+    st.subheader("I can help you in extracting invoice data")
+
+
+    # Upload the Invoices (pdf files)...
+    pdf = st.file_uploader("Upload invoices here, only PDF files allowed", type=["pdf"],accept_multiple_files=True)
+
+    submit=st.button("Extract Data")
+
+    if submit:
+        with st.spinner('Wait for it...'):
+            df=create_docs(pdf)
+            st.write(df.head())
+
+            data_as_csv= df.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                "Download data as CSV",
+                data_as_csv,
+                "benchmark-tools.csv",
+                "text/csv",
+                key="download-tools-csv",
+            )
+        st.success("Hope I was able to save your time❤️")
+
+

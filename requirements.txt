@@ -1,3 +1,6 @@
 langchain
 streamlit
-ctransformers
+openai
+python-dotenv
+pypdf
+replicate

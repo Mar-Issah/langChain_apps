@@ -9,6 +9,10 @@ streamlit = "*"
 langchain-community = "*"
 langchain-openai = "*"
 ctransformers = "*"
+openai = "*"
+python-dotenv = "*"
+pypdf = "*"
+replicate = "*"
 
 [dev-packages]
 
