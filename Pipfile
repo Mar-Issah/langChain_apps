@@ -8,12 +8,7 @@ langchain = "*"
 streamlit = "*"
 langchain-community = "*"
 langchain-openai = "*"
-sentence-transformers = "*"
-uvicorn = "*"
 ctransformers = "*"
-fastapi = "*"
-ipykernel = "*"
-python-box = "*"
 
 [dev-packages]
 
