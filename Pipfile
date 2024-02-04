@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+langchain = "*"
+streamlit = "*"
+langchain-community = "*"
+langchain-openai = "*"
+sentence-transformers = "*"
+uvicorn = "*"
+ctransformers = "*"
+fastapi = "*"
+ipykernel = "*"
+python-box = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
