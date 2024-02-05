@@ -30,16 +30,17 @@ def extracted_data(pages_data):
 
     #The below code will be used when we want to use LLAMA 2 model,  we will use Replicate for hosting our model....
 
-    #output = replicate.run('replicate/llama-2-70b-chat:2c1608e18606fad2812020dc541930f2d0495ce32eee50074220b87300bc16e1',
-                           #input={"prompt":prompt_template.format(pages=pages_data) ,
-                                  #"temperature":0.1, "top_p":0.9, "max_length":512, "repetition_penalty":1})
+    # output = replicate.run('replicate/llama-2-70b-chat:2c1608e18606fad2812020dc541930f2d0495ce32eee50074220b87300bc16e1',
+    #                        input={"prompt":prompt_template.format(pages=pages_data) ,
+    #                               "temperature":0.1, "top_p":0.9, "max_length":512, "repetition_penalty":1})
 
-    #full_response = ''
-    #for item in output:
-        #full_response += item
+    # full_response = ''
+    # for item in output:
+    #     full_response += item
 
 
-    #print(full_response)
+    # print(full_response)
+
     return full_response
 
 
@@ -79,9 +80,8 @@ def create_docs(user_pdf_list):
             print("No match found.")
 
 
-        # df=df._append([data_dict], ignore_index=True)
+        df=df._append([data_dict], ignore_index=True)
         # print("********************DONE***************")
-        #df=df.append(save_to_dataframe(llm_extracted_data), ignore_index=True)
 
     df.head()
     return df
