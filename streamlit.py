@@ -6,7 +6,7 @@ from utils import *
 if __name__ == '__main__':
     load_dotenv()
 
-    st.set_page_config(page_title="Invoice Extraction Bot")
+    st.set_page_config(page_title="Invoice Extraction Bot", page_icon="🧾")
     st.title("Invoice Extraction Bot...💁 ")
     st.subheader("I can help you in extracting invoice data")
 
@@ -19,16 +19,17 @@ if __name__ == '__main__':
     if submit:
         with st.spinner('Wait for it...'):
             df=create_docs(pdf)
-            st.write(df.head())
+            # st.write(df.head())
+            st.write(df)
 
-            data_as_csv= df.to_csv(index=False).encode("utf-8")
-            st.download_button(
-                "Download data as CSV",
-                data_as_csv,
-                "benchmark-tools.csv",
-                "text/csv",
-                key="download-tools-csv",
-            )
+            # data_as_csv= df.to_csv(index=False).encode("utf-8")
+            # st.download_button(
+            #     "Download data as CSV",
+            #     data_as_csv,
+            #     "benchmark-tools.csv",
+            #     "text/csv",
+            #     key="download-tools-csv",
+            # )
         st.success("Hope I was able to save your time❤️")
 
 
