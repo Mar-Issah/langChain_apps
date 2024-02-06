@@ -1,37 +1,28 @@
 import streamlit as st
-from dotenv import load_dotenv
-from utils import *
-
+# from utils import *
 
 if __name__ == '__main__':
-    load_dotenv()
+    st.set_page_config(page_title="Customer Care Call", page_icon="☎️")
+    st.title("Customer Care Call Summarization")
 
-    st.set_page_config(page_title="Invoice Extraction Bot", page_icon="🧾")
-    st.subheader("Invoice Extraction Bot...LLAMA-2 | OpenAI")
+    # Upload multiple files
+    uploaded_files = st.file_uploader("Upload recorded .mp3 files", type=["mp3"], accept_multiple_files=True)
 
+    if uploaded_files:
+        st.write("Uploaded Files:")
 
-    st.write(":green[I can help you in extracting invoice data]")
+        # Display uploaded files and buttons in a tabular form
+        for uploaded_file in uploaded_files:
+            file_name = uploaded_file.name
 
+            col1, col2, col3 = st.columns([0.1, 1, 2])
+            with col1:
+                st.write("-")
+            with col2:
+                st.write(file_name)
+            with col3:
+                send_button = st.button(f"Send Email for {file_name}")
 
-    # Upload the Invoices (pdf files)...
-    pdf = st.file_uploader("Upload invoices here, only PDF files allowed", type=["pdf"],accept_multiple_files=True)
-
-    submit=st.button("Extract Data")
-
-    if submit:
-        with st.spinner('Wait for it...'):
-            df=create_docs(pdf)
-            st.write(df.head())
-            # st.write(df)
-
-            data_as_csv= df.to_csv(index=False).encode("utf-8")
-            st.download_button(
-                "Download data as CSV",
-                data_as_csv,
-                "benchmark-tools.csv",
-                "text/csv",
-                key="download-tools-csv",
-            )
-        st.success("Hope I was able to save your time❤️")
-
-
+                if send_button:
+                    # email_summary(file_name)
+                    st.success(f"Send email for: {file_name}")

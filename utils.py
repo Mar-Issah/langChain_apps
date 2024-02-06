@@ -1,87 +1,41 @@
-# from langchain.llms import OpenAI
-from pypdf import PdfReader
-from langchain.llms.openai import OpenAI
-import pandas as pd
-import re
-import replicate
-from langchain.prompts import PromptTemplate
-from langchain_community.llms import OpenAI
+import whisper
+from langchain.llms import OpenAI
+from langchain.agents import initialize_agent
+from langchain.agents.agent_toolkits import ZapierToolkit
+from langchain.utilities.zapier import ZapierNLAWrapper
+import os
+
+# get from https://platform.openai.com/
+os.environ["OPENAI_API_KEY"] = "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"
+
+# get from https://nla.zapier.com/docs/authentication/ & https://actions.zapier.com/credentials/ after logging in):
+os.environ["ZAPIER_NLA_API_KEY"] = "sk-ak-iPp3rBjaP9PpjRDpDhIXtsXsCj"
 
 
-def get_pdf_text(pdf_doc):
-    text = ""
-    pdf_reader = PdfReader(pdf_doc)
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-    return text
+def email_summary(file):
+    # large language model
+    llm = OpenAI(temperature=0)
 
-#Function to extract data from text
-def extracted_data(pages_data):
-    template = """Extract all the following values : invoice no., Description, Quantity, date,
-        Unit price , Amount, Total, email, phone number and address from this data: {pages}
+    # Initializing zapier
+    zapier = ZapierNLAWrapper()
+    toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier)
 
-        Expected output: remove any dollar symbols {{'Invoice no.': '1001329','Description': 'Office Chair','Quantity': '2','Date': '5/4/2023','Unit price': '1100.00','Amount': '2200.00','Total': '2200.00','Email': 'Santoshvarma0988@gmail.com','Phone number': '9999999999','Address': 'Mumbai, India'}}
-        """
-    prompt_template = PromptTemplate(input_variables=["pages"], template=template)
-
-    llm = OpenAI(temperature=.7)
-    # prompt_template.format, the context passed to the intelligence model to format it
-    full_response=llm(prompt_template.format(pages=pages_data))
-
-    #The below code will be used when we want to use LLAMA 2 model,  we will use Replicate for hosting our model....
-
-    # output = replicate.run('replicate/llama-2-70b-chat:2c1608e18606fad2812020dc541930f2d0495ce32eee50074220b87300bc16e1',
-    #                        input={"prompt":prompt_template.format(pages=pages_data) ,
-    #                               "temperature":0.1, "top_p":0.9, "max_length":512, "repetition_penalty":1})
-
-    # full_response = ''
-    # for item in output:
-    #     full_response += item
+    # The agent used here is a "zero-shot-react-description" agent.
+    # Zero-shot means the agent functions on the current action only — it has no memory.
+    # It uses the ReAct framework to decide which tool to use, based solely on the tool's description.
+    agent = initialize_agent(toolkit.get_tools(), llm, agent="zero-shot-react-description", verbose=True)
 
 
-    # print(full_response)
-
-    return full_response
-
-
-# iterate over files in
-# that user uploaded PDF files, one by one
-def create_docs(user_pdf_list):
-
-# create an empty dataframe
-    df = pd.DataFrame({'Invoice no.': pd.Series(dtype='str'),
-                   'Description': pd.Series(dtype='str'),
-                   'Quantity': pd.Series(dtype='str'),
-                   'Date': pd.Series(dtype='str'),
-	                'Unit price': pd.Series(dtype='str'),
-                   'Amount': pd.Series(dtype='int'),
-                   'Total': pd.Series(dtype='str'),
-                   'Email': pd.Series(dtype='str'),
-	                'Phone number': pd.Series(dtype='str'),
-                   'Address': pd.Series(dtype='str')
-                    })
-
-    for filename in user_pdf_list:
-        # print(filename)
-        raw_data=get_pdf_text(filename)
-
-        llm_extracted_data=extracted_data(raw_data)
-        #Adding items to our list - Adding data & its metadata
-
-        pattern = r'{(.+)}'
-        match = re.search(pattern, llm_extracted_data, re.DOTALL)
-
-        if match:
-            extracted_text = match.group(1)
-            # Converting the extracted text to a dictionary
-            data_dict = eval('{' + extracted_text + '}')
-            # print(data_dict)
-        else:
-            print("No match found.")
+    # specify a model, here its BASE
+    model = whisper.load_model("base")
 
 
-        df=df._append([data_dict], ignore_index=True)
-        # print("********************DONE***************")
 
-    df.head()
-    return df
+    # transcribe audio file
+    result = model.transcribe(file)
+    print(result["text"])
+
+    # Send email using zapier
+    agent.run("Send an Email to sharathraju489@gmail.com via gmail summarizing the following text provided below : "+result["text"])
+
+
