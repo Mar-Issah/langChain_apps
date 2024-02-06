@@ -10,8 +10,6 @@ langchain-community = "*"
 langchain-openai = "*"
 openai = "*"
 python-dotenv = "*"
-ffmpeg-python = "*"
-openai-whisper = "*"
 
 [dev-packages]
 

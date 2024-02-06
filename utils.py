@@ -1,31 +1,26 @@
-import whisper
 # from langchain.llms import OpenAI
 from langchain_openai import OpenAI
-from langchain.agents import AgentType, initialize_agent
-from langchain_community.agent_toolkits import ZapierToolkit
-from langchain_community.utilities.zapier import ZapierNLAWrapper
 import os
+import time
+import base64
+import streamlit as st
 
 os.environ.get("OPENAI_API_KEY")
-os.environ.get("ZAPIER_NLA_API_KEY")
 
-def email_summary(file):
-    llm = OpenAI(temperature=0)
-    print("email_summary")
-    # Initializing zapier
-    llm = OpenAI(temperature=0)
-    zapier = ZapierNLAWrapper()
-    toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier)
-    agent = initialize_agent(
-    toolkit.get_tools(), llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+# Function to download text content as a file using Streamlit
+def text_downloader(raw_text):
+    # Generate a timestamp for the filename to ensure uniqueness
+    timestr = time.strftime("%Y%m%d-%H%M%S")
 
-    # specify a model, here its BASE
-    model = whisper.load_model("base")
+    # Encode the raw text in base64 format for file download
+    b64 = base64.b64encode(raw_text.encode()).decode()
 
-    # transcribe audio file
-    result = model.transcribe(file)
-    print(result["text"])
+    new_filename = "code_review_analysis_file_{}_.txt".format(timestr)
 
-    # Send email using zapier
-    agent.run("Send an Email to masy370@gmail.com via gmail summarizing the following text provided below : "+result["text"])
+    st.markdown("#### Download File ✅###")
+
+    href = f'<a href="data:file/txt;base64,{b64}" download="{new_filename}">Click Here!!</a>'
+
+  # Display the HTML link using Streamlit markdown
+    st.markdown(href, unsafe_allow_html=True)
 

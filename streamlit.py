@@ -1,28 +1,32 @@
 import streamlit as st
 from utils import *
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage, SystemMessage
+from io import StringIO
 
 if __name__ == '__main__':
-    st.set_page_config(page_title="Customer Care Call", page_icon="☎️")
-    st.title("Customer Care Call Summarization")
+   st.title("Let's do code review for your python code")
+   st.header("Please upload your .py file here:")
 
-    # Upload multiple files
-    uploaded_files = st.file_uploader("Upload recorded .mp3 files", type=["mp3"], accept_multiple_files=True)
+   # Capture the .py file data
+   data = st.file_uploader("Upload python file",type=".py")
 
-    if uploaded_files:
-        st.write("Uploaded Files:")
+   if data:
+        # Create a StringIO object and initialize it with the decoded content of 'data'
+    stringio = StringIO(data.getvalue().decode('utf-8'))
+    fetched_data = stringio.read()
 
-        # Display uploaded files and buttons in a tabular form
-        for uploaded_file in uploaded_files:
-            file_name = uploaded_file.name
+    # Initialize a ChatOpenAI instance with the specified model
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.9)
 
-            col1, col2, col3 = st.columns([0.1, 1, 2])
-            with col1:
-                st.write("-")
-            with col2:
-                st.write(file_name)
-            with col3:
-                send_button = st.button(f"Send Email for {file_name}")
+    # Create a SystemMessage instance with the specified content, providing information about the assistant's role.
+    systemMessage = SystemMessage(content="You are a code review assistant. Provide detailed suggestions to improve the given Python code along by mentioning the existing code line by line with proper indent")
 
-                if send_button:
-                    email_summary(file_name)
-                    st.success(f"Send email for: {file_name}")
+    # Create a HumanMessage instance with content read from some data source.
+    humanMessage = HumanMessage(content=fetched_data)
+
+    finalResponse = chat([systemMessage, humanMessage])
+
+    #Display review comments
+    st.markdown(finalResponse.content)
+    text_downloader(finalResponse.content)

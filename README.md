@@ -1,6 +1,6 @@
-### Customer Care Call Summarization
+### Code reviewer
 
-LangChain | Streamlit | Zapier | Openai
+LangChain | Streamlit | ChatOpenAI
 
 ## To run this app locally, follow these steps:
 
