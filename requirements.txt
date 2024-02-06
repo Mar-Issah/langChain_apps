@@ -2,5 +2,5 @@ langchain
 streamlit
 openai
 python-dotenv
-pypdf
-replicate
+ffmpeg-python
+openai-whisper

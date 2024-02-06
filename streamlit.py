@@ -1,5 +1,5 @@
 import streamlit as st
-# from utils import *
+from utils import *
 
 if __name__ == '__main__':
     st.set_page_config(page_title="Customer Care Call", page_icon="☎️")
@@ -24,5 +24,5 @@ if __name__ == '__main__':
                 send_button = st.button(f"Send Email for {file_name}")
 
                 if send_button:
-                    # email_summary(file_name)
+                    email_summary(file_name)
                     st.success(f"Send email for: {file_name}")

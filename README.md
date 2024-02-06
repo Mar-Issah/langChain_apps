@@ -1,8 +1,6 @@
-### Invoice extractor bot
+### Customer Care Call Summarization
 
-LangChain | Streamlit | LLama 2 | Openai
-
-![App](app.png)
+LangChain | Streamlit | Zapier | Openai
 
 ## To run this app locally, follow these steps:
 
