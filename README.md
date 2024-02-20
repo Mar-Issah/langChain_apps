@@ -1,6 +1,6 @@
 # LangChain Apps
 
-LangChain Apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugging Face
+LangChain Apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugging Face.
 
 ![Repo size](https://img.shields.io/github/repo-size/Mar-Issah/langChain_apps)
 ![Repo License](https://img.shields.io/github/license/Mar-Issah/langChain_apps.svg)
