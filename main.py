@@ -4,7 +4,7 @@ from langchain_openai import OpenAI
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import (
 ConversationSummaryMemory)
-import app as st
+import streamlit as st
 import os
 
 os.environ.get("OPENAI_API_KEY")
