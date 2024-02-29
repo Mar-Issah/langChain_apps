@@ -1,4 +1,4 @@
-### Find SImilar Things
+### ChatGPT CLone
 
 LangChain| OpenAI | Streamlit | Streamlit-chat | ConversationSummaryMemory
 
