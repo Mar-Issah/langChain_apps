@@ -11,11 +11,11 @@ if __name__ == "__main__":
 		return input_text
 
 	user_input= get_input()
-	response = answer_query(user_input)
 
 	submit = st.button('Generate')
 	#If generate button is clicked
 	if submit:
+		response = answer_query(user_input)
 		if response:
 			st.subheader(":green[Answer:]")
 			st.success(response)

@@ -1,10 +1,10 @@
 ### Simple Question and Answer app
 
-LangChain| OpenAI | Streamlit | HuggingFace
+LangChain| OpenAI | Streamlit | HuggingFace | Google Gemini
 
 ## To run this app locally, follow these steps:
 
 - Clone the repository
-- `pipenv shell`
+- start your vitual env
 - `pipenv install -r requirement.txt`
 - `streamlit run streamlit.py`
