@@ -7,6 +7,6 @@ LangChain| OpenAI Embeddings | Streamlit | FAISS
 ## To run this app locally, follow these steps:
 
 - Clone the repository
-- `pipenv shell`
-- `pipenv install -r requirement.txt`
-- `streamlit run streamlit.py`
+- Initialize virtual env
+- Run `pip install -r requirement.txt`
+- Run `streamlit run streamlit.py`
