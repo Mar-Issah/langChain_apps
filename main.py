@@ -17,7 +17,7 @@ if __name__ == "__main__":
         chat = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
         st.session_state.chats.append(HumanMessage(content=query))
         #chat takes a list of SystemMessage, HumanMessage and returns an output.
-        assistant_answer = chat(st.session_state.chats)
+        assistant_answer = chat.invoke(st.session_state.chats)
         # append the output to the chats to get more context and related responses
         st.session_state.chats.append(AIMessage(content=assistant_answer.content))
         return assistant_answer.content
