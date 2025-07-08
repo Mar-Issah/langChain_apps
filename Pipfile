@@ -4,14 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-openai = "*"
-langchain = "*"
 streamlit = "*"
+langchain-openai = "*"
 python-dotenv = "*"
-streamlit-chat = "*"
 tiktoken = "*"
 openpyxl = "*"
 faiss-cpu = "*"
+langchain = "*"
+langchain-huggingface = "*"
+sentence_transformers = "*"
+langchain-community = "*"
 
 [dev-packages]
 

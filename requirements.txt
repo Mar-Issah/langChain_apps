@@ -1,6 +1,9 @@
-openai
-langchain
 streamlit
-tiktoken
-openpyxl
+langchain-openai
+langchain-google-genai
+langchain-huggingface
+python-dotenv
 faiss-cpu
+langchain
+sentence_transformers
+langchain-community

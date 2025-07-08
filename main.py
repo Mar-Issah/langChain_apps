@@ -1,7 +1,8 @@
 import os
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.document_loaders import CSVLoader
-from langchain.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+from langchain_community.document_loaders import CSVLoader
+from langchain_community.vectorstores import FAISS
 
 os.environ.get("OPENAI_API_KEY")
 
@@ -19,7 +20,8 @@ data = loader.load()
 
 # 2. embed the data into FAISS vector store, We are not splitting into chunks since it is a small data
 # initiate the embedding
-embeddings = OpenAIEmbeddings()
+# embeddings = OpenAIEmbeddings()
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 db = FAISS.from_documents(data, embeddings)
 
 # Query the FAISS vector database
