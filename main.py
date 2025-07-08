@@ -1,6 +1,9 @@
 import streamlit as st
-from langchain.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage, SystemMessage, AIMessage
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
+import os
+
+os.environ.get("OPENAI_API_KEY")
 
 if __name__ == "__main__":
     st.set_page_config(page_title="LangChain Demo", page_icon=":robot:", layout="centered")
@@ -11,9 +14,9 @@ if __name__ == "__main__":
         st.session_state.chats = [SystemMessage(content="You are a very helpful AI assistant")]
 
     def answer_query(query):
-        chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
+        chat = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
         st.session_state.chats.append(HumanMessage(content=query))
-        #chat takes a list of SystemMessage, HumanMessage and retunr an output.
+        #chat takes a list of SystemMessage, HumanMessage and returns an output.
         assistant_answer = chat(st.session_state.chats)
         # append the output to the chats to get more context and related responses
         st.session_state.chats.append(AIMessage(content=assistant_answer.content))

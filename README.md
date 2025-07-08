@@ -7,6 +7,6 @@ LangChain| OpenAI Chat | Streamlit | HuggingFace
 ## To run this app locally, follow these steps:
 
 - Clone the repository
-- `pipenv shell`
-- `pipenv install -r requirement.txt`
+- Initialize virtual env
+- `pip install -r requirements.txt`
 - `streamlit run main.py`
