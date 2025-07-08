@@ -2,8 +2,6 @@
 import os
 from langchain_openai import OpenAI
 from langchain_google_genai import GoogleGenerativeAI
-from dotenv import load_dotenv
-load_dotenv()
 
 # os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 os.environ.get("OPENAI_API_KEY")
