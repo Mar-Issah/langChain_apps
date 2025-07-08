@@ -4,7 +4,6 @@ from langchain_core.example_selectors import LengthBasedExampleSelector
 from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
 
 os.environ.get("OPENAI_API_KEY")
-os.environ.pop("SSL_CERT_FILE", None)
 
 
 def get_response(query, age, tasktype_option,numberOfWords):
