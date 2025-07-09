@@ -6,6 +6,7 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 import os
 from langchain_core.messages import AIMessage, HumanMessage,BaseMessage
 from typing import List
+from config import get_llm
 
 os.environ.get("OPENAI_API_KEY")
 # os.environ.pop("SSL_CERT_FILE", None)
@@ -28,7 +29,7 @@ def summarize_conversation(messages: List[BaseMessage]) -> str:
         conversation_text += f"{role}: {msg}\n"
 
     # Run it through an LLM chain
-    llm = ChatOpenAI(model="gpt-4o-mini")
+    llm =get_llm()
     chain = summary_prompt | llm
     summary = chain.invoke({"conversation":conversation_text})
 
@@ -43,7 +44,7 @@ def get_session_history(session_id: str) -> ChatMessageHistory:
 
 
 def get_response(input_user_message: str) -> ChatMessageHistory:
-    llm = ChatOpenAI(model="gpt-4o-mini")
+    llm = get_llm()
     prompt = ChatPromptTemplate.from_messages(
     [
         ("system", "You are a very helpful assistant."),
