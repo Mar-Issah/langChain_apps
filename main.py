@@ -1,27 +1,69 @@
-#from langchain import OpenAI  #Langchain has recently suggested to use the below import
-# from langchain.llms import OpenAI
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationChain
-from langchain.chains.conversation.memory import (
-ConversationSummaryMemory)
+from langchain.memory import ConversationSummaryMemory, ChatMessageHistory
 import streamlit as st
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder,PromptTemplate
+from langchain_core.runnables.history import RunnableWithMessageHistory
 import os
+from langchain_core.messages import AIMessage, HumanMessage
 
 os.environ.get("OPENAI_API_KEY")
+# os.environ.pop("SSL_CERT_FILE", None)
 
-def get_response(userInput):
-    if st.session_state['conversation'] is None:
-        llm = OpenAI(
-            temperature=0,
-            model_name='gpt-3.5-turbo-instruct'  # 'text-davinci-003' model is depreciated now
-        )
-        # same as creating the conversation var. but in the state
-        st.session_state['conversation'] = ConversationChain(
-            llm=llm,
-            # verbose=True,
-            memory=ConversationSummaryMemory(llm=llm)
-        )
 
-    response = st.session_state['conversation'].predict(input=userInput)
-    # print(st.session_state['conversation'].memory.buffer) the summary
-    return response
+def summarize_conversation(messages):
+    # A summarization prompt template
+    summary_prompt = PromptTemplate.from_template("""
+    Summarize the following conversation in few words between a user and an assistant:
+
+    {conversation}
+
+    Summary:
+    """)
+
+    # Convert message history to plain text
+    conversation_text = ""
+    for msg in messages:
+        role = "Human" if isinstance(msg, HumanMessage) else "AI"
+        conversation_text += f"{role}: {msg}\n"
+
+    # Run it through an LLM chain
+    llm = ChatOpenAI(model="gpt-4o-mini")
+    chain = summary_prompt | llm
+    summary = chain.invoke({"conversation":conversation_text})
+
+    return summary.content.strip()
+
+
+# generate an id for chat
+def get_session_history(session_id):
+    if session_id not in st.session_state:
+        st.session_state[session_id] = ChatMessageHistory()
+    return st.session_state[session_id]
+
+
+def get_response(input_user_message):
+    llm = ChatOpenAI(model="gpt-4o-mini")
+    prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", "You are a very helpful assistant."),
+        MessagesPlaceholder(variable_name="history_messages"),
+        ("human", "{input_user_message}"),
+    ])
+
+    chain = prompt | llm
+
+    chain_with_message_history = RunnableWithMessageHistory(
+    chain,
+    get_session_history,
+    input_messages_key="input_user_message",
+    history_messages_key="history_messages",
+)
+    chain_with_message_history.invoke(
+    {"input_user_message": input_user_message},
+    {"configurable": {"session_id": "chat1"}},
+)
+
+    st.session_state['previous_chat'] = st.session_state["chat1"]
+    return  st.session_state["chat1"]
+

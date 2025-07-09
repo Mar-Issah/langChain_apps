@@ -1,53 +1,47 @@
 import streamlit as st
-from main import get_response
-from streamlit_chat import message
+from main import get_response, summarize_conversation
+from langchain_core.messages import AIMessage, HumanMessage
 
 def main():
+    # Initialize session state for previous chat if not already set.
+    # due to reruns, we need to store the previous chat in session state so it persists across interactions like btn clicks
+    if "previous_chat" not in st.session_state:
+        st.session_state['previous_chat'] = {}
+
     # Set page configurations
-    st.set_page_config(page_title="ChatGPT Clone",
-                       page_icon='🤖💬',
-                       layout='centered',
-                       initial_sidebar_state='expanded')
+    st.set_page_config(
+        page_title="ChatGPT Clone",
+        page_icon='🤖💬',
+        layout='centered',
+        initial_sidebar_state='expanded'
+    )
 
-    st.markdown("<h3 style='text-align: center;'>How can I assist you? </h3>", unsafe_allow_html=True)
-
-    # Initialize the Application state. A state to hold the conversation summary and messages between AI and Human
-    if 'conversation' not in st.session_state:
-        st.session_state['conversation'] = None
-    if 'messages' not in st.session_state:
-        st.session_state['messages'] = []
+    st.markdown("<h3 style='text-align: center;'>How can I assist you?</h3>", unsafe_allow_html=True)
 
     # Sidebar UI
     with st.sidebar:
         st.title("📄💬➡️🔍")
-     #    st.write("Click the button below to obtain a summary of your chat.")
 
-        # Check if conversation data is available to enable the summary button
-        if st.session_state['conversation'] is None:
-          st.write("I can create a summary of your chat once it is available.")
-        else:
-            st.write("Click the button below to obtain a summary of your chat.")
-            summarise_btn = st.button("Summarise the conversation", key="summarise", type="secondary")
-            if summarise_btn:
-                st.write("Below is the summary of our conversation ❤️:\n\n" + st.session_state['conversation'].memory.buffer)
-
-    response_container = st.container()
-    # Here we will have a container for user input text box
-
+    # Chat input
     prompt = st.chat_input("Enter a prompt here")
-    if prompt:
-        # Append the user's prompt and by the AI's response
-        st.session_state['messages'].append(prompt)
-        model_response = get_response(prompt)
-        st.session_state['messages'].append(model_response)
 
-        # Finally display the user message and AI message
-        with response_container:
-            for i in range(len(st.session_state['messages'])):
-                if (i % 2) == 0:
-                    message(st.session_state['messages'][i], is_user=True, key=str(i) + '_user')
-                else:
-                    message(st.session_state['messages'][i], key=str(i) + '_AI')
+    if prompt:
+        model_response = get_response(prompt)
+
+        if model_response:
+            st.sidebar.write("Summary of your chat.")
+            # summarise_btn = st.sidebar.button("Summarise the conversation", key="summarise", type="secondary")
+            st.sidebar.write(summarize_conversation(st.session_state["previous_chat"]))
+
+          #   if summarise_btn:
+          #      st.sidebar.write(summarize_conversation(st.session_state["previous_chat"]))
+
+            with st.container():
+                for msg in model_response.messages:
+                    if isinstance(msg, HumanMessage):
+                        st.chat_message("user").write(msg.content)
+                    elif isinstance(msg, AIMessage):
+                        st.chat_message("assistant").write(msg.content)
 
 if __name__ == "__main__":
     main()
