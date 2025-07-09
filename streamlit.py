@@ -1,12 +1,13 @@
 import streamlit as st
 from main import get_response, summarize_conversation
 from langchain_core.messages import AIMessage, HumanMessage
+from typing import Optional, List, Dict, Any
 
 def main():
     # Initialize session state for previous chat if not already set.
     # due to reruns, we need to store the previous chat in session state so it persists across interactions like btn clicks
     if "previous_chat" not in st.session_state:
-        st.session_state['previous_chat'] = {}
+        st.session_state["previous_chat"]= {}
 
     # Set page configurations
     st.set_page_config(
@@ -23,7 +24,7 @@ def main():
         st.title("📄💬➡️🔍")
 
     # Chat input
-    prompt = st.chat_input("Enter a prompt here")
+    prompt : Optional[str]= st.chat_input("Enter a prompt here")
 
     if prompt:
         model_response = get_response(prompt)

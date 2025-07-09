@@ -1,17 +1,17 @@
 from langchain_openai import ChatOpenAI
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationSummaryMemory, ChatMessageHistory
+from langchain.memory import  ChatMessageHistory
 import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder,PromptTemplate
 from langchain_core.runnables.history import RunnableWithMessageHistory
 import os
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage,BaseMessage
+from typing import List
 
 os.environ.get("OPENAI_API_KEY")
 # os.environ.pop("SSL_CERT_FILE", None)
 
 
-def summarize_conversation(messages):
+def summarize_conversation(messages: List[BaseMessage]) -> str:
     # A summarization prompt template
     summary_prompt = PromptTemplate.from_template("""
     Summarize the following conversation in few words between a user and an assistant:
@@ -36,13 +36,13 @@ def summarize_conversation(messages):
 
 
 # generate an id for chat
-def get_session_history(session_id):
+def get_session_history(session_id: str) -> ChatMessageHistory:
     if session_id not in st.session_state:
         st.session_state[session_id] = ChatMessageHistory()
     return st.session_state[session_id]
 
 
-def get_response(input_user_message):
+def get_response(input_user_message: str) -> ChatMessageHistory:
     llm = ChatOpenAI(model="gpt-4o-mini")
     prompt = ChatPromptTemplate.from_messages(
     [
