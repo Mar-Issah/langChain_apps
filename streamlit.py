@@ -25,7 +25,7 @@ def main():
         st.title("📄💬➡️🔍")
 
     # Chat input
-    prompt : Optional[str]= st.chat_input("Enter a prompt here")
+    prompt : str = st.chat_input("Enter a prompt here")
 
     if prompt:
         model_response = get_response(prompt)
