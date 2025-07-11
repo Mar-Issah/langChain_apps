@@ -64,7 +64,7 @@ def get_response(input_user_message: str) -> ChatMessageHistory:
     {"input_user_message": input_user_message},
     {"configurable": {"session_id": "chat1"}},
 )
-
+# Saving in st state to prevent lost of data due to reruns.
     st.session_state['previous_chat'] = st.session_state["chat1"]
     return  st.session_state["chat1"]
 
