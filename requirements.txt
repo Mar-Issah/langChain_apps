@@ -1,0 +1,5 @@
+openai
+langchain
+streamlit
+langchain-experimental
+langchain-community
