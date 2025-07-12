@@ -7,6 +7,6 @@ LangChain| OpenAI | Streamlit | Tool
 ## To run this app locally, follow these steps:
 
 - Clone the repository
-- `pipenv shell`
-- `pipenv install -r requirement.txt`
-- `streamlit run streamlit.py`
+- `pipenv shell`/ Start your Virtual env
+- Run `pip install -r requirement.txt`
+- Run `streamlit run streamlit.py`
