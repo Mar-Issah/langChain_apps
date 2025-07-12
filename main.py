@@ -1,5 +1,4 @@
 from langchain_core.documents import Document
-from langchain.chains.question_answering import load_qa_chain
 from vector_utils import add_documents_to_store
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter

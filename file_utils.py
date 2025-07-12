@@ -31,12 +31,14 @@ def upload_file():
                     with open(file_path, "wb") as f:
                         f.write(uploaded_file.getvalue())
                         store = prepare_doc(file_path, original_id)
-                        print(store)
+                        print("STORE: ", store)
                         if store:
                             st.toast(
                                 f"File prepared and saved as {uploaded_file.name}",
                                 icon="😍",
                             )
+                        else:
+                            delete_file(directory, new_filename)
     except Exception as e:
         delete_file(directory, new_filename)
         st.error(f"Error uploading file: {e}")
