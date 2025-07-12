@@ -14,6 +14,8 @@ chromadb = "*"
 sentence-transformers = "*"
 pypdf = "*"
 tiktoken = "*"
+langchain_chroma = "*"
+
 
 [dev-packages]
 
