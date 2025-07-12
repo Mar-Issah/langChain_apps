@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # LangChain Apps
+=======
+### CSV Analyser
+>>>>>>> 7_csv_analysis
 
 LangChain Apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugging Face.
 
