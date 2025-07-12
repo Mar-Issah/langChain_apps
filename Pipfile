@@ -15,6 +15,9 @@ sentence-transformers = "*"
 pypdf = "*"
 tiktoken = "*"
 langchain_chroma = "*"
+langchain_huggingface = "*"
+langchain-text-splitters = "*"
+langchain-core = "*"
 
 
 [dev-packages]
