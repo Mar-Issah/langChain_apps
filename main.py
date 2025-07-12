@@ -19,7 +19,7 @@ def query_agent(csv_file, query):
 
     # Create a Pandas DataFrame agent.
     agent = create_pandas_dataframe_agent(
-        llm, df, verbose=True, allow_dangerous_code=enable_code_execution
+        llm, df, verbose=False, allow_dangerous_code=enable_code_execution
     )
 
     # Python REPL: A Python shell used to evaluating and executing Python commands.
