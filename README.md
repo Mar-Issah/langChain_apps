@@ -1,4 +1,4 @@
-### Find SImilar Things
+### Video Script Writing tool
 
 LangChain| OpenAI | Streamlit | Tool
 
