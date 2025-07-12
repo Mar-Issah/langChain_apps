@@ -10,3 +10,4 @@ LangChain| OpenAI | Streamlit | Tool
 - `pipenv shell`/ Start your Virtual env
 - Run `pip install -r requirement.txt`
 - Run `streamlit run streamlit.py`
+
