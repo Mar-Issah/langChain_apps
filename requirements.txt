@@ -3,6 +3,7 @@ langchain
 streamlit
 langchain-community
 sentence-transformers
+langchain-openai
 tiktoken
 python-dotenv
 pinecone-client
