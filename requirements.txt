@@ -6,4 +6,5 @@ sentence-transformers
 langchain-openai
 tiktoken
 python-dotenv
-pinecone-client
+lancedb
+pypdf
