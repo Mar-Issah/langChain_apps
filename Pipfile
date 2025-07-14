@@ -15,7 +15,7 @@ tiktoken = "*"
 langchain-pinecone = "*"
 lancedb = "*"
 bs4 = "*"
-langchain-huggingface
+langchain-huggingface = "*"
 
 [dev-packages]
 
