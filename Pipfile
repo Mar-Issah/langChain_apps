@@ -10,12 +10,12 @@ streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
-sentence-transformers = "*"
 pypdf = "*"
 tiktoken = "*"
 langchain-pinecone = "*"
 lancedb = "*"
 bs4 = "*"
+langchain-huggingface
 
 [dev-packages]
 

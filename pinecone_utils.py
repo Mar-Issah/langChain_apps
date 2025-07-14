@@ -13,7 +13,9 @@ import streamlit as st
 from langchain.chains.summarize import load_summarize_chain
 
 pinecone_api_key = os.environ.get("PINECONE_API_KEY")
+hf_api_key = os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 pinecone_index_name = "hr-screening"
+# Initialize Pinecone
 pc = Pinecone(api_key=pinecone_api_key)
 
 vector_store = st.session_state.get("vector_store")
@@ -21,6 +23,8 @@ vector_store = st.session_state.get("vector_store")
 
 def create_store():
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    # embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    print(embeddings)
     # This can be configure on Pinecone dashboard. uncomment below to create a new index
     # pc.create_index(
     #     name="hr-screening",
