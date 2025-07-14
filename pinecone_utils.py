@@ -22,18 +22,22 @@ vector_store = st.session_state.get("vector_store")
 
 
 def create_store():
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    # embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    print(embeddings)
-    # This can be configure on Pinecone dashboard. uncomment below to create a new index
-    # pc.create_index(
-    #     name="hr-screening",
-    #     dimension=384,
-    #     metric="cosine",  # or 'dotproduct'/'euclidean' based on your use case
-    # )
-    index = pc.Index(pinecone_index_name)
-    vector_store = PineconeVectorStore(index=index, embedding=embeddings)
-    return vector_store
+    try:
+        embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+        # embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        print(embeddings)
+        # This can be configure on Pinecone dashboard. uncomment below to create a new index
+        # pc.create_index(
+        #     name="hr-screening",
+        #     dimension=384,
+        #     metric="cosine",  # or 'dotproduct'/'euclidean' based on your use case
+        # )
+        index = pc.Index(pinecone_index_name)
+        vector_store = PineconeVectorStore(index=index, embedding=embeddings)
+        return vector_store
+    except Exception as e:
+        print(f"Error creating vector store: {e}")
+        return None
 
 
 def pull_from_pinecone(job_desc, k) -> VectorStore:
