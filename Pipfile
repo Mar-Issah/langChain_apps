@@ -16,6 +16,7 @@ langchain-pinecone = "*"
 lancedb = "*"
 bs4 = "*"
 langchain-huggingface = "*"
+sentence-transformers = "*"
 
 [dev-packages]
 
