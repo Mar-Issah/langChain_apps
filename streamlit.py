@@ -21,7 +21,7 @@ if __name__ == "__main__":
     with col3:
         email_style = st.selectbox(
             "Writing Style",
-            ("Formal", "Informal" "Appreciating", "Not Satisfied", "Neutral"),
+            ("Formal", "Informal", "Appreciating", "Not Satisfied", "Neutral"),
             index=0,
         )
 
