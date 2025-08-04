@@ -37,6 +37,7 @@ def main():
             type=["pdf"],
             accept_multiple_files=True,
         )
+        # print(st.session_state["vector_store"])
 
         # If the user has uploaded any pdf files
         if pdfs and not st.session_state["uploaded_files"]:

@@ -6,13 +6,14 @@ from typing import List
 from langchain_core.vectorstores import VectorStore
 from langchain_pinecone import PineconeVectorStore
 import os
-from langchain_community.embeddings.sentence_transformer import (
-    SentenceTransformerEmbeddings,
-)
+from langchain_huggingface import HuggingFaceEmbeddings
 import streamlit as st
 from langchain.chains.summarize import load_summarize_chain
+import getpass
 
-pinecone_api_key = os.environ.get("PINECONE_API_KEY")
+pinecone_api_key = os.environ.get("PINECONE_API_KEY") or getpass.getpass(
+    "enter your key: "
+)
 hf_api_key = os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 pinecone_index_name = "hr-screening"
 # Initialize Pinecone
@@ -23,9 +24,8 @@ vector_store = st.session_state.get("vector_store")
 
 def create_store():
     try:
-        embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-        # embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        print(embeddings)
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        # print(embeddings)
         # This can be configure on Pinecone dashboard. uncomment below to create a new index
         # pc.create_index(
         #     name="hr-screening",
