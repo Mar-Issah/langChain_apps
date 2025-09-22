@@ -10,16 +10,18 @@ from langchain_huggingface import HuggingFaceEmbeddings
 import streamlit as st
 from langchain.chains.summarize import load_summarize_chain
 import getpass
+import os
+from dotenv import load_dotenv
 
-pinecone_api_key = os.environ.get("PINECONE_API_KEY") or getpass.getpass(
-    "enter your key: "
-)
+# Load environment variables from .env file
+load_dotenv()
+pinecone_api_key = os.environ.get("PINECONE_API_KEY")
 hf_api_key = os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 pinecone_index_name = "hr-screening"
 # Initialize Pinecone
 pc = Pinecone(api_key=pinecone_api_key)
 
-vector_store = st.session_state.get("vector_store")
+# vector_store = st.session_state.get("vector_store")
 
 
 def create_store():
@@ -40,7 +42,7 @@ def create_store():
         return None
 
 
-def pull_from_pinecone(job_desc, k) -> VectorStore:
+def pull_from_pinecone(vector_store, job_desc, k) -> VectorStore:
     """
     Pull documents from Pinecone vector store.
 
@@ -57,7 +59,7 @@ def pull_from_pinecone(job_desc, k) -> VectorStore:
         print(e)
 
 
-def push_to_pinecone(docs: List[Document]) -> None:
+def push_to_pinecone(vector_store, docs: List[Document]) -> None:
     """
     Push documents to Pinecone vector store.
 
