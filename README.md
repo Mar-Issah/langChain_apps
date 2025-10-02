@@ -1,6 +1,6 @@
 # LangChain Apps
 
-LangChain Apps | Beginner | Intermediate | Advanced level - OpenAI, LLAMA2, Hugging Face.
+A collection of beginner to advanced projects built with LangChain, using OpenAI, LLaMA2, and Hugging Face models. Each project is organized into its own branch.
 
 ![Repo size](https://img.shields.io/github/repo-size/Mar-Issah/langChain_apps)
 ![Repo License](https://img.shields.io/github/license/Mar-Issah/langChain_apps.svg)
