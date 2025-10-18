@@ -1,4 +1,5 @@
-from langchain.schema import Document
+# from langchain.schema import Document
+from langchain_core.documents import Document
 from pypdf import PdfReader
 
 
