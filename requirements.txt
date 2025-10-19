@@ -4,6 +4,7 @@ streamlit
 langchain-community
 sentence-transformers
 langchain-openai
+langchain-pinecone
 tiktoken
 python-dotenv
 lancedb
