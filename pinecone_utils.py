@@ -5,7 +5,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
 from typing import List
 from langchain_core.vectorstores import VectorStore
-from langchain_pinecone import PineconeVectorStore
+from langchain_pinecone.vectorstores import PineconeVectorStore
 import os
 import streamlit as st
 from langchain.chains.summarize import load_summarize_chain
