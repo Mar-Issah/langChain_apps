@@ -1,15 +1,14 @@
 # from langchain.vectorstores import Pinecone as pc
 from pinecone import Pinecone
 from langchain_openai import OpenAI
+from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
 from typing import List
 from langchain_core.vectorstores import VectorStore
 from langchain_pinecone import PineconeVectorStore
 import os
-from langchain_huggingface import HuggingFaceEmbeddings
 import streamlit as st
 from langchain.chains.summarize import load_summarize_chain
-import getpass
 import os
 from dotenv import load_dotenv
 
@@ -24,10 +23,14 @@ pc = Pinecone(api_key=pinecone_api_key)
 # vector_store = st.session_state.get("vector_store")
 
 
-def create_store():
+def create_store() -> PineconeVectorStore:
     try:
-        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        # print(embeddings)
+        embeddings = OpenAIEmbeddings(
+            model="text-embedding-3-small",
+            dimensions=512,
+            deployment="embedding-3-small",
+        )
+        # print("Embeddings", embeddings)
         # This can be configure on Pinecone dashboard. uncomment below to create a new index
         # pc.create_index(
         #     name="hr-screening",
@@ -59,7 +62,7 @@ def pull_from_pinecone(vector_store, job_desc, k) -> VectorStore:
         print(e)
 
 
-def push_to_pinecone(vector_store, docs: List[Document]) -> None:
+def push_to_pinecone(vector_store, docs: List[Document]) -> bool:
     """
     Push documents to Pinecone vector store.
 
@@ -73,7 +76,7 @@ def push_to_pinecone(vector_store, docs: List[Document]) -> None:
         vector_store.add_documents(documents=docs)
         return True
     except Exception as e:
-        print(e)
+        print("Push to pinecone error:", e)
 
 
 # Helps us get the summary of a document/resume

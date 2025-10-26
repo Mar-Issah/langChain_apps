@@ -15,7 +15,8 @@ if "uploaded_files" not in st.session_state:
 if "vector_store" not in st.session_state:
     st.session_state["vector_store"] = create_store()
 
-print(st.session_state["vector_store"])
+print(f"Creating vector Store...: {st.session_state['vector_store']}")
+
 
 def main():
     load_dotenv()
@@ -46,7 +47,9 @@ def main():
             final_docs_list = create_docs(pdfs)
 
             # Push data to PINECONE
-            push_docs = push_to_pinecone(st.session_state["vector_store"], final_docs_list)
+            push_docs = push_to_pinecone(
+                st.session_state["vector_store"], final_docs_list
+            )
 
             if push_docs:
                 # Displaying the count of resumes that have been uploaded
@@ -68,7 +71,9 @@ def main():
                 # print(st.session_state)
 
                 # FeTch relavant documents from PINECONE vector store
-                results = pull_from_pinecone(st.session_state["vector_store"], job_description, document_count)
+                results = pull_from_pinecone(
+                    st.session_state["vector_store"], job_description, document_count
+                )
 
                 st.write(":heavy_minus_sign:" * 30)
                 st.success(f"Find below the {document_count} Resumes")
