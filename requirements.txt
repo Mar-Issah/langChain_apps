@@ -1,10 +1,11 @@
 openai
-langchain
+langchain==0.3.27
 streamlit
 langchain-community
 sentence-transformers
 langchain-openai
-langchain-pinecone
+langchain-pinecone==0.2.8
+pinecone-client
 tiktoken
 python-dotenv
 lancedb
