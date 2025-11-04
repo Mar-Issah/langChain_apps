@@ -1,8 +1,8 @@
 openai
-langchain==0.3.27
+langchain==0.2.15
 streamlit
 langchain-openai
-langchain-pinecone==0.2.8
+langchain-pinecone
 pinecone-client
 tiktoken
 python-dotenv

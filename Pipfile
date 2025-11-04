@@ -5,14 +5,14 @@ name = "pypi"
 
 [packages]
 openai = "*"
-langchain = "*"
+langchain = "==0.2.15"
 streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
-pypdf = "*"
+pypdf = "*"ß
 tiktoken = "*"
-langchain-pinecone = "*"
+langchain-pinecone = "==0.2.8"
 lancedb = "*"
 bs4 = "*"
 langchain-huggingface = "*"
