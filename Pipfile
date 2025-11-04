@@ -10,7 +10,7 @@ streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
 langchain-openai = "*"
-pypdf = "*"ß
+pypdf = "*"
 tiktoken = "*"
 langchain-pinecone = "==0.2.8"
 lancedb = "*"
