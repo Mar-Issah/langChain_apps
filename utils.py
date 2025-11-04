@@ -7,6 +7,8 @@ from pypdf import PdfReader
 def get_pdf_text(pdf_doc):
     text = ""
     pdf_reader = PdfReader(pdf_doc)
+    if len(pdf_reader.pages) == 0:
+        raise ValueError("No pages found in the PDF file")
     for page in pdf_reader.pages:
         text += page.extract_text()
     return text
@@ -14,7 +16,7 @@ def get_pdf_text(pdf_doc):
 
 # iterate over files in
 # that user uploaded PDF files, one by one
-def create_docs(user_pdf_list):
+def create_docs(user_pdf_list, unique_id):
     docs = []
     # each pdf file is a doc. We are creating our own Document with it
     for filename in user_pdf_list:
@@ -27,7 +29,7 @@ def create_docs(user_pdf_list):
                 page_content=chunks,
                 metadata={
                     "name": filename.name,
-                    # "id": filename.file_id,
+                    "file_id": unique_id,
                     "type=": filename.type,
                     "size": filename.size,
                 },

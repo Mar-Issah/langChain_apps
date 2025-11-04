@@ -7,6 +7,7 @@ from pinecone_utils import (
     pull_from_pinecone,
     get_summary,
 )
+import uuid
 
 # Creating session variables
 if "uploaded_files" not in st.session_state:
@@ -15,7 +16,10 @@ if "uploaded_files" not in st.session_state:
 if "vector_store" not in st.session_state:
     st.session_state["vector_store"] = create_store()
 
-print(f"Creating vector Store...: {st.session_state['vector_store']}")
+if "unique_id'" not in st.session_state:
+    st.session_state["unique_id"] = ""
+
+# print(f"Creating vector Store...: {st.session_state['vector_store']}")
 
 
 def main():
@@ -25,6 +29,9 @@ def main():
     st.subheader("HR - Resume Screening Assistance...")
     # st.subheader("I can help you in resume screening process")
     try:
+        # Create a unique ID for this session to filter out docs
+        st.session_state["unique_id"] = str(uuid.uuid4().hex)
+
         job_description = st.text_area(
             "Please paste the 'JOB DESCRIPTION' here...", key="desc"
         )
@@ -44,7 +51,7 @@ def main():
         if pdfs and not st.session_state["uploaded_files"]:
             st.session_state["uploaded_files"].append(pdfs)
             # Create a Document list out of all the user uploaded pdf files
-            final_docs_list = create_docs(pdfs)
+            final_docs_list = create_docs(pdfs, st.session_state["unique_id"])
 
             # Push data to PINECONE
             push_docs = push_to_pinecone(
@@ -72,11 +79,17 @@ def main():
 
                 # FeTch relavant documents from PINECONE vector store
                 results = pull_from_pinecone(
-                    st.session_state["vector_store"], job_description, document_count
+                    st.session_state["vector_store"],
+                    job_description,
+                    document_count,
+                    st.session_state["unique_id"],
                 )
+                if len(results) == 0:
+                    st.error("No documents found for the given description")
+                    return
 
                 st.write(":heavy_minus_sign:" * 30)
-                st.success(f"Find below the {document_count} Resumes")
+                st.success(f"Find below the {document_count} Resume(s)")
 
                 # For each item in relavant docs - we are displaying some info of it on the UI
                 for idx, (resume, score) in enumerate(results[: int(document_count)]):

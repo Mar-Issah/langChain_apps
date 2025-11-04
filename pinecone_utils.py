@@ -44,7 +44,7 @@ def create_store() -> PineconeVectorStore:
         return None
 
 
-def pull_from_pinecone(vector_store, job_desc, k) -> VectorStore:
+def pull_from_pinecone(vector_store, job_desc, k, unique_id) -> VectorStore:
     """
     Pull documents from Pinecone vector store.
 
@@ -55,7 +55,11 @@ def pull_from_pinecone(vector_store, job_desc, k) -> VectorStore:
         PineconeVectorStore: Vector store.
     """
     try:
-        results = vector_store.similarity_search_with_score(job_desc, k=k)
+        results = vector_store.similarity_search_with_score(
+            job_desc, k=k, filter={"file_id": unique_id}
+        )
+        print(f"Unique ID: {unique_id}")
+        print(f"Results: {results}")
         return results
     except Exception as e:
         print(e)
