@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 openai = "*"
-langchain = "==0.2.15"
 streamlit = "*"
 python-dotenv = "*"
 langchain-community = "*"
