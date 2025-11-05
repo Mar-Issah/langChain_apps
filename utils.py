@@ -30,7 +30,7 @@ def create_docs(user_pdf_list, unique_id):
                 metadata={
                     "name": filename.name,
                     "file_id": unique_id,
-                    "type=": filename.type,
+                    "type": filename.type,
                     "size": filename.size,
                 },
             )

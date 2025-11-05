@@ -16,8 +16,8 @@ if "uploaded_files" not in st.session_state:
 if "vector_store" not in st.session_state:
     st.session_state["vector_store"] = create_store()
 
-if "unique_id'" not in st.session_state:
-    st.session_state["unique_id"] = ""
+if "unique_id" not in st.session_state:
+    st.session_state["unique_id"] = str(uuid.uuid4().hex)
 
 # print(f"Creating vector Store...: {st.session_state['vector_store']}")
 
@@ -28,9 +28,12 @@ def main():
     st.set_page_config(page_title="Resume Screening Assistance", page_icon="📝")
     st.subheader("HR - Resume Screening Assistance...")
     # st.subheader("I can help you in resume screening process")
+
+    # print(f"Session ID: `{st.session_state['unique_id']}`")
+
     try:
-        # Create a unique ID for this session to filter out docs
-        st.session_state["unique_id"] = str(uuid.uuid4().hex)
+        # unique_id is already created in session state initialization above
+        # This ensures it persists across reruns
 
         job_description = st.text_area(
             "Please paste the 'JOB DESCRIPTION' here...", key="desc"
@@ -72,10 +75,6 @@ def main():
 
         if submit:
             with st.spinner("Wait for it..."):
-                # # Creating a unique ID, so that we can use to query and get only the user uploaded documents from PINECONE vector store
-                # unique_id = uuid.uuid4().hex
-                # st.session_state["unique_id"] = unique_id
-                # print(st.session_state)
 
                 # FeTch relavant documents from PINECONE vector store
                 results = pull_from_pinecone(

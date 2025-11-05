@@ -1,10 +1,10 @@
-openai
-langchain==0.2.15
-streamlit
-langchain-openai
-langchain-pinecone
-pinecone-client
+langchain
 tiktoken
 python-dotenv
-lancedb
 pypdf
+streamlit
+langchain-core
+langchain-pinecone==0.2.8
+langchain-openai
+pinecone-client
+

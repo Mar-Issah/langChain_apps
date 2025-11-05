@@ -1,7 +1,6 @@
 # from langchain.vectorstores import Pinecone as pc
 from pinecone import Pinecone
-from langchain_openai import OpenAI
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAI, OpenAIEmbeddings
 from langchain_core.documents import Document
 from typing import List
 from langchain_core.vectorstores import VectorStore
@@ -55,14 +54,19 @@ def pull_from_pinecone(vector_store, job_desc, k, unique_id) -> VectorStore:
         PineconeVectorStore: Vector store.
     """
     try:
+        #print(f"Querying Pinecone with file_id filter: {unique_id}")
         results = vector_store.similarity_search_with_score(
             job_desc, k=k, filter={"file_id": unique_id}
         )
-        print(f"Unique ID: {unique_id}")
-        print(f"Results: {results}")
+        #print(f"Found {len(results)} results with file_id: {unique_id}")
+        if results:
+            # Verify the file_id matches
+            for doc, score in results[:3]:  # Check first 3 results
+                doc_file_id = doc.metadata.get("file_id", "NOT_FOUND")
+                print(f"  Result file_id: {doc_file_id}, score: {score:.4f}")
         return results
     except Exception as e:
-        print(e)
+        print(f"Error querying Pinecone: {e}")
 
 
 def push_to_pinecone(vector_store, docs: List[Document]) -> bool:
@@ -76,6 +80,10 @@ def push_to_pinecone(vector_store, docs: List[Document]) -> bool:
         PineconeVectorStore: Vector store.
     """
     try:
+        # Log the unique_id being used for debugging
+        if docs:
+            unique_id = docs[0].metadata.get("file_id", "NOT_FOUND")
+            #print(f"Pushing {len(docs)} documents to Pinecone with file_id: {unique_id}")
         vector_store.add_documents(documents=docs)
         return True
     except Exception as e:
