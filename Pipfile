@@ -8,7 +8,7 @@ openai = "*"
 langchain-community = "*"
 lancedb = "*"
 bs4 = "*"
-langchain = "*"
+langchain = "==0.2.15"
 tiktoken = "*"
 python-dotenv = "*"
 pypdf = "*"
@@ -16,6 +16,7 @@ streamlit = "*"
 langchain-core = "*"
 langchain-pinecone = "*"
 pinecone-client = "*"
+langchain-openai = "*"
 
 [dev-packages]
 
